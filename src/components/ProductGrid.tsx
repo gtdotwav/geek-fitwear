@@ -30,7 +30,7 @@ export default function ProductGrid() {
     if (sizes.length) list = list.filter(p => p.sizes.some(s => sizes.includes(s)));
     if (sort === 'low') list.sort((a, b) => a.pixPrice - b.pixPrice);
     if (sort === 'high') list.sort((a, b) => b.pixPrice - a.pixPrice);
-    if (sort === 'new') list.sort((a, b) => (a.tag === 'New' ? -1 : b.tag === 'New' ? 1 : 0));
+    if (sort === 'new') list.sort((a, b) => (a.tag === 'Novo' ? -1 : b.tag === 'Novo' ? 1 : 0));
     return list;
   }, [cat, sort, sizes]);
 
