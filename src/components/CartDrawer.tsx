@@ -75,7 +75,7 @@ export default function CartDrawer() {
                 <AnimatePresence>
                   {items.map(item => (
                     <motion.div
-                      key={`${item.product.id}-${item.size}`}
+                      key={`${item.product.id}-${item.size}-${item.variant ?? ''}`}
                       layout
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -93,23 +93,25 @@ export default function CartDrawer() {
                       <div className="flex-1 min-w-0">
                         <p className="text-[#6F6A5F] text-[9px] tracking-[0.2em] uppercase mb-0.5">{item.product.category}</p>
                         <p className="text-[#1A1A1A] font-light text-sm tracking-wide">{item.product.name}</p>
-                        <p className="text-[#6F6A5F] text-[10px] mt-0.5">Tamanho {item.size}</p>
+                        <p className="text-[#6F6A5F] text-[10px] mt-0.5">
+                          Tamanho {item.size}{item.variant === 'com-logo' ? ' · Com Logo' : item.variant === 'sem-logo' ? ' · Sem Logo' : ''}
+                        </p>
                         <p className="text-[#1A1A1A] font-light text-sm mt-2">
                           R$ {item.product.pixPrice.toFixed(2).replace('.', ',')}
                         </p>
                         <div className="flex items-center justify-between mt-3">
                           <div className="flex items-center gap-3 border-b border-[#E6DFD2] pb-1">
-                            <button onClick={() => updateQuantity(item.product.id, item.size, item.quantity - 1)}
+                            <button onClick={() => updateQuantity(item.product.id, item.size, item.quantity - 1, item.variant)}
                               className="text-[#6F6A5F] hover:text-[#1A1A1A] transition-colors">
                               <Minus className="w-3 h-3" strokeWidth={1.3} />
                             </button>
                             <span className="text-[#1A1A1A] text-xs font-light w-3 text-center">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.product.id, item.size, item.quantity + 1)}
+                            <button onClick={() => updateQuantity(item.product.id, item.size, item.quantity + 1, item.variant)}
                               className="text-[#6F6A5F] hover:text-[#1A1A1A] transition-colors">
                               <Plus className="w-3 h-3" strokeWidth={1.3} />
                             </button>
                           </div>
-                          <button onClick={() => removeItem(item.product.id, item.size)}
+                          <button onClick={() => removeItem(item.product.id, item.size, item.variant)}
                             className="text-[#E6DFD2] hover:text-[#6F6A5F] transition-colors">
                             <Trash2 className="w-3.5 h-3.5" strokeWidth={1.3} />
                           </button>

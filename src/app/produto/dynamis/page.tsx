@@ -29,9 +29,9 @@ const pieces: Record<PieceKey, PieceConfig> = {
     label: 'Top',
     subtitle: 'Sports Bra',
     images: [
-      '/products/dynamis/1.png',
-      '/products/dynamis/7.png',
-      '/products/dynamis/6.png',
+      '/products/dynamis/set-shorts-arms.png',
+      '/products/dynamis/set-grid.png',
+      '/products/dynamis/shorts-studio.png',
     ],
     originalPrice: 189,
     pixPrice: 152,
@@ -51,9 +51,9 @@ const pieces: Record<PieceKey, PieceConfig> = {
     label: 'Shorts',
     subtitle: 'Biker Shorts',
     images: [
-      '/products/dynamis/3.png',
-      '/products/dynamis/2.png',
-      '/products/dynamis/5.png',
+      '/products/dynamis/shorts-front.png',
+      '/products/dynamis/set-shorts-front-side.png',
+      '/products/dynamis/shorts-grid.png',
     ],
     originalPrice: 169,
     pixPrice: 135,
@@ -73,8 +73,8 @@ const pieces: Record<PieceKey, PieceConfig> = {
     label: 'Legging',
     subtitle: 'Full Length',
     images: [
-      '/products/dynamis/4.png',
-      '/products/dynamis/Untitled.png',
+      '/products/dynamis/legging-front.png',
+      '/products/dynamis/legging-walk.png',
     ],
     originalPrice: 229,
     pixPrice: 184,
@@ -94,12 +94,12 @@ const pieces: Record<PieceKey, PieceConfig> = {
     label: 'Conjunto',
     subtitle: 'Top + Shorts',
     images: [
-      '/products/dynamis/6.png',
-      '/products/dynamis/1.png',
-      '/products/dynamis/3.png',
-      '/products/dynamis/2.png',
-      '/products/dynamis/5.png',
-      '/products/dynamis/7.png',
+      '/products/dynamis/shorts-studio.png',
+      '/products/dynamis/set-shorts-arms.png',
+      '/products/dynamis/shorts-front.png',
+      '/products/dynamis/set-shorts-front-side.png',
+      '/products/dynamis/shorts-grid.png',
+      '/products/dynamis/set-grid.png',
     ],
     originalPrice: 339,
     pixPrice: 271,
@@ -503,14 +503,14 @@ export default function DynamisPage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {[
-              '/products/dynamis/1.png',
-              '/products/dynamis/3.png',
-              '/products/dynamis/4.png',
-              '/products/dynamis/Untitled.png',
-              '/products/dynamis/6.png',
-              '/products/dynamis/2.png',
-              '/products/dynamis/5.png',
-              '/products/dynamis/7.png',
+              '/products/dynamis/set-shorts-arms.png',
+              '/products/dynamis/shorts-front.png',
+              '/products/dynamis/legging-front.png',
+              '/products/dynamis/legging-walk.png',
+              '/products/dynamis/shorts-studio.png',
+              '/products/dynamis/set-shorts-front-side.png',
+              '/products/dynamis/shorts-grid.png',
+              '/products/dynamis/set-grid.png',
             ].map((src, i) => (
               <motion.div
                 key={i}

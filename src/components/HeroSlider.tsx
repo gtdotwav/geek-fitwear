@@ -44,7 +44,7 @@ export default function HeroSlider() {
   return (
     <section
       data-hero
-      className="relative w-full h-screen overflow-hidden bg-[#2B2B2B]"
+      className="relative w-full h-[60vh] md:h-[80vh] lg:h-screen overflow-hidden bg-[#2B2B2B]"
     >
       {/* Images — crossfade */}
       <AnimatePresence mode="sync">
@@ -59,7 +59,7 @@ export default function HeroSlider() {
           <img
             src={slides[current].image}
             alt="Greek Fitwear Campaign"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain md:object-cover"
           />
         </motion.div>
       </AnimatePresence>
