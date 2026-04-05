@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ShoppingBag, Check } from 'lucide-react';
 import { Product } from '@/data/products';
+import { useCart } from '@/context/CartContext';
 
 const tagStyle: Record<string, string> = {
   'Novo': 'text-[#A88F6A]',
@@ -14,8 +16,11 @@ const tagStyle: Record<string, string> = {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
+  const { addItem } = useCart();
   const [activeColor, setActiveColor] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [showSizes, setShowSizes] = useState(false);
+  const [added, setAdded] = useState(false);
 
   const color = product.colors[activeColor];
   const img = hovered && color.backImage ? color.backImage : color.image;
@@ -24,11 +29,26 @@ export default function ProductCard({ product }: { product: Product }) {
     ((product.originalPrice - product.pixPrice) / product.originalPrice) * 100
   );
 
+  const handleQuickAdd = (e: React.MouseEvent, size: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product, size);
+    setAdded(true);
+    setShowSizes(false);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  const toggleSizes = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowSizes(!showSizes);
+  };
+
   return (
     <div
       className="group bg-[#F5F1E8]"
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => { setHovered(false); setShowSizes(false); }}
     >
       {/* Image */}
       <Link href={`/produto/${product.id}`} className="block relative overflow-hidden aspect-[3/4]">
@@ -61,14 +81,62 @@ export default function ProductCard({ product }: { product: Product }) {
           </span>
         )}
 
-        {/* Quick view — fade in on hover */}
-        <div className={`absolute bottom-0 left-0 right-0 z-10 transition-all duration-400 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-          <span
-            className="block w-full bg-[#F5F1E8]/90 text-[#1A1A1A] py-3 text-[9px] tracking-[0.3em] uppercase font-medium text-center backdrop-blur-sm"
-          >
-            Ver Detalhes
-          </span>
-        </div>
+        {/* Bottom bar — sizes or CTA */}
+        <AnimatePresence mode="wait">
+          {showSizes ? (
+            <motion.div
+              key="sizes"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{ duration: 0.15 }}
+              className="absolute bottom-0 left-0 right-0 z-10 bg-[#F5F1E8]/95 backdrop-blur-sm px-3 py-3"
+              onClick={e => e.preventDefault()}
+            >
+              <p className="text-[#6F6A5F] text-[8px] tracking-[0.25em] uppercase text-center mb-2">Selecione o tamanho</p>
+              <div className="flex justify-center gap-1.5">
+                {product.sizes.map(size => (
+                  <button
+                    key={size}
+                    onClick={e => handleQuickAdd(e, size)}
+                    className="w-9 h-9 text-[9px] font-medium border border-[#E6DFD2] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-[#F5F1E8] hover:border-[#1A1A1A] transition-all duration-200"
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          ) : hovered ? (
+            <motion.div
+              key="hover-bar"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{ duration: 0.15 }}
+              className="absolute bottom-0 left-0 right-0 z-10 flex"
+            >
+              <Link
+                href={`/produto/${product.id}`}
+                className="flex-1 bg-[#F5F1E8]/90 text-[#1A1A1A] py-3 text-[9px] tracking-[0.3em] uppercase font-medium text-center backdrop-blur-sm hover:bg-[#F5F1E8] transition-colors"
+              >
+                Ver Detalhes
+              </Link>
+              <button
+                onClick={toggleSizes}
+                className={`px-4 py-3 backdrop-blur-sm transition-colors ${
+                  added
+                    ? 'bg-[#A88F6A] text-[#F5F1E8]'
+                    : 'bg-[#1A1A1A]/90 text-[#F5F1E8] hover:bg-[#1A1A1A]'
+                }`}
+              >
+                {added
+                  ? <Check className="w-4 h-4" strokeWidth={1.5} />
+                  : <ShoppingBag className="w-4 h-4" strokeWidth={1.3} />
+                }
+              </button>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </Link>
 
       {/* Info */}
