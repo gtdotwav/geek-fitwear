@@ -75,7 +75,7 @@ export default function ProductGrid() {
           <div className="flex items-center gap-4">
             {/* Size filter */}
             <div className="flex items-center gap-1">
-              {['P', 'M', 'G', 'GG'].map(s => (
+              {['PP', 'P', 'M', 'G', 'GG'].map(s => (
                 <button
                   key={s}
                   onClick={() => toggleSize(s)}

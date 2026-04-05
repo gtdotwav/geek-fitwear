@@ -61,7 +61,7 @@ export default function ProductPage({ params }: Props) {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E6DFD2]">
-            {[['P','62–68','88–94','68'],['M','68–74','94–100','70'],['G','74–80','100–106','72'],['GG','80–88','106–114','74']].map(([sz,...r]) => (
+            {[['PP','58–62','84–88','66'],['P','62–68','88–94','68'],['M','68–74','94–100','70'],['G','74–80','100–106','72'],['GG','80–88','106–114','74']].map(([sz,...r]) => (
               <tr key={sz}>
                 <td className="py-3 text-[#1A1A1A] font-medium">{sz}</td>
                 {r.map((v,i) => <td key={i} className="py-3 text-[#6F6A5F] font-light">{v}</td>)}

@@ -119,7 +119,7 @@ const pieces: Record<PieceKey, PieceConfig> = {
 };
 
 const pieceKeys: PieceKey[] = ['top', 'shorts', 'pants', 'fullOutfit'];
-const sizes = ['P', 'M', 'G', 'GG'];
+const sizes = ['PP', 'P', 'M', 'G', 'GG'];
 
 const washing = 'Lavar à mão ou em máquina com água fria no ciclo delicado. Não usar alvejante ou amaciante. Não torcer. Secar à sombra. Não passar ferro.';
 

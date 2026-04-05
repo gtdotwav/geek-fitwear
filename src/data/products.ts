@@ -38,7 +38,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/top-closeup.png', backImage: '/products/areth/shorts-studio.png' },
     ],
@@ -57,7 +57,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/shorts-stand.png', backImage: '/products/areth/shorts-chair.png' },
     ],
@@ -76,7 +76,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/legging-front.png', backImage: '/products/areth/legging-walk.png' },
     ],
@@ -95,7 +95,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/legging-full.png', backImage: '/products/areth/set-grid.png' },
     ],
@@ -114,7 +114,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/shorts-stand.png', backImage: '/products/areth/shorts-studio.png' },
     ],
@@ -135,7 +135,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Verde Oliva', hex: '#5C6B4A', image: '/products/soma/legging-front.png', backImage: '/products/soma/legging-side.png' },
     ],
@@ -154,7 +154,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Verde Oliva', hex: '#5C6B4A', image: '/products/soma/shorts-front.png', backImage: '/products/soma/shorts-front2.png' },
     ],
@@ -173,7 +173,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Verde Oliva', hex: '#5C6B4A', image: '/products/soma/legging-front.png', backImage: '/products/soma/legging-stretch.png' },
     ],
@@ -192,7 +192,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Verde Oliva', hex: '#5C6B4A', image: '/products/soma/legging-stretch.png', backImage: '/products/soma/set-grid.png' },
     ],
@@ -211,7 +211,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Verde Oliva', hex: '#5C6B4A', image: '/products/soma/shorts-front.png', backImage: '/products/soma/shorts-studio.png' },
     ],
@@ -232,7 +232,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Creme', hex: '#E2D6C6', image: '/products/dynamis/set-shorts-arms.png', backImage: '/products/dynamis/set-grid.png' },
     ],
@@ -251,7 +251,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Creme', hex: '#E2D6C6', image: '/products/dynamis/shorts-front.png', backImage: '/products/dynamis/shorts-studio.png' },
     ],
@@ -270,7 +270,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Creme', hex: '#E2D6C6', image: '/products/dynamis/legging-front.png', backImage: '/products/dynamis/legging-walk.png' },
     ],
@@ -289,7 +289,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Creme', hex: '#E2D6C6', image: '/products/dynamis/legging-walk.png', backImage: '/products/dynamis/set-grid.png' },
     ],
@@ -308,7 +308,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Creme', hex: '#E2D6C6', image: '/products/dynamis/set-shorts-front-side.png', backImage: '/products/dynamis/shorts-grid.png' },
     ],
@@ -329,7 +329,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Terracota', hex: '#B8654A', image: '/products/kinisis/shorts-front.png', backImage: '/products/kinisis/shorts-side.png' },
     ],
@@ -348,7 +348,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Terracota', hex: '#B8654A', image: '/products/kinisis/shorts-crouch.png', backImage: '/products/kinisis/shorts-walk.png' },
     ],
@@ -367,7 +367,7 @@ export const products: Product[] = [
     originalPrice: 129,
     pixPrice: 95,
     installments: { count: 12, value: 7.92 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Terracota', hex: '#B8654A', image: '/products/kinisis/legging-stretch.png', backImage: '/products/kinisis/set-grid.png' },
     ],
@@ -386,7 +386,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Terracota', hex: '#B8654A', image: '/products/kinisis/legging-stretch.png', backImage: '/products/kinisis/set-grid.png' },
     ],
@@ -405,7 +405,7 @@ export const products: Product[] = [
     originalPrice: 229,
     pixPrice: 169.90,
     installments: { count: 12, value: 14.16 },
-    sizes: ['P', 'M', 'G', 'GG'],
+    sizes: ['PP', 'P', 'M', 'G', 'GG'],
     colors: [
       { name: 'Terracota', hex: '#B8654A', image: '/products/kinisis/shorts-front.png', backImage: '/products/kinisis/shorts-grid.png' },
     ],
