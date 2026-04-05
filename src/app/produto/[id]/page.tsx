@@ -139,7 +139,7 @@ export default function ProductPage({ params }: Props) {
 
             <div>
               <p className="text-[#6F6A5F] text-[9px] tracking-[0.35em] uppercase mb-2">{product.category}</p>
-              <h1 className="font-serif font-light text-[#1A1A1A] text-4xl md:text-5xl italic tracking-tight leading-tight">
+              <h1 className="font-serif font-extralight text-[#1A1A1A] text-4xl md:text-5xl tracking-tight leading-tight">
                 {product.name}
               </h1>
             </div>
@@ -352,7 +352,7 @@ export default function ProductPage({ params }: Props) {
             <div className="flex items-end justify-between mb-12">
               <div>
                 <p className="text-[#6F6A5F] text-[9px] tracking-[0.4em] uppercase mb-2">Você também pode gostar</p>
-                <h2 className="font-serif font-light italic text-[#1A1A1A] text-3xl">Mais {product.category}</h2>
+                <h2 className="font-serif font-extralight text-[#1A1A1A] text-3xl">Mais {product.category}</h2>
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">

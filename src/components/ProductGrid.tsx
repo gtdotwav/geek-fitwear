@@ -42,7 +42,7 @@ export default function ProductGrid() {
         <div className="flex items-end justify-between mb-14">
           <div>
             <p className="text-[#6F6A5F] text-[9px] tracking-[0.45em] uppercase mb-2">GreekFit</p>
-            <h2 className="font-serif font-light text-[#1A1A1A] text-4xl md:text-5xl italic">
+            <h2 className="font-serif font-extralight text-[#1A1A1A] text-4xl md:text-5xl">
               A Coleção
             </h2>
           </div>

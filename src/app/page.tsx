@@ -34,7 +34,7 @@ export default function HomePage() {
       <section className="bg-[#F5F1E8] py-24 lg:py-32 border-b border-[#E6DFD2]">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
-            <p className="font-serif font-light italic text-[#1A1A1A] text-2xl md:text-[28px] lg:text-4xl leading-[1.6] tracking-wide">
+            <p className="font-serif font-extralight text-[#1A1A1A] text-2xl md:text-[28px] lg:text-4xl leading-[1.6] tracking-wide">
               "Feito onde o sol encontra a pedra —<br />
               para corpos que se movem com intenção."
             </p>
@@ -72,7 +72,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-7 left-7">
                   <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-1 opacity-80">Todas as linhas</p>
-                  <p className="text-[#F5F1E8] font-serif font-light italic text-2xl">ΑΡΕΤΗ · ΣΩΜΑ · ΔΥΝΑΜΙΣ · ΚΙΝΗΣΙΣ</p>
+                  <p className="text-[#F5F1E8] font-serif font-extralight text-2xl">ΑΡΕΤΗ · ΣΩΜΑ · ΔΥΝΑΜΙΣ · ΚΙΝΗΣΙΣ</p>
                 </div>
               </Link>
             </Reveal>
@@ -90,7 +90,7 @@ export default function HomePage() {
                   />
                   <div className="absolute bottom-5 left-5">
                     <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Lifestyle</p>
-                    <p className="text-[#F5F1E8] font-serif font-light italic text-xl">Movimento & Fluidez</p>
+                    <p className="text-[#F5F1E8] font-serif font-extralight text-xl">Movimento & Fluidez</p>
                   </div>
                 </Link>
               </Reveal>
@@ -106,7 +106,7 @@ export default function HomePage() {
                   />
                   <div className="absolute bottom-5 left-5">
                     <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Nova Coleção</p>
-                    <p className="text-[#F5F1E8] font-serif font-light italic text-xl">ΔΥΝΑΜΙΣ</p>
+                    <p className="text-[#F5F1E8] font-serif font-extralight text-xl">ΔΥΝΑΜΙΣ</p>
                   </div>
                 </Link>
               </Reveal>
@@ -154,10 +154,10 @@ export default function HomePage() {
                 <div className="flex items-center justify-center px-10 py-16 lg:py-0 lg:px-16">
                   <div className="text-center">
                     <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-6">Nova Coleção</p>
-                    <h2 className="font-serif font-light text-[#F5F1E8] text-6xl md:text-7xl tracking-wide mb-3">
+                    <h2 className="font-serif font-extralight text-[#F5F1E8] text-6xl md:text-7xl tracking-wide mb-3">
                       ΔΥΝΑΜΙΣ
                     </h2>
-                    <p className="font-serif font-light italic text-[#A88F6A] text-xl tracking-wide mb-8">
+                    <p className="font-serif font-extralight text-[#A88F6A] text-xl tracking-wide mb-8">
                       Força
                     </p>
                     <p className="text-[#8C7A5B] font-light text-sm leading-loose max-w-xs mx-auto mb-10">
@@ -209,10 +209,10 @@ export default function HomePage() {
               <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-8">
                 Sorteio Semanal
               </p>
-              <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.15] mb-4">
+              <h2 className="font-serif font-extralight text-[#F5F1E8] text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.15] mb-4">
                 Kit Gostosa Grega.
               </h2>
-              <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">
+              <p className="font-serif font-extralight text-[#C2A27C] text-lg tracking-wide mb-8">
                 Toda semana, uma de vocês leva.
               </p>
               <p className="text-[#8C7A5B] font-light text-[13px] leading-[2] max-w-lg mx-auto mb-4">
@@ -330,7 +330,7 @@ export default function HomePage() {
                 <p className="text-[#6F6A5F] text-[9px] tracking-[0.45em] uppercase mb-10">
                   Campanha 2025
                 </p>
-                <h2 className="font-serif font-light italic text-[#1A1A1A] text-4xl md:text-5xl leading-tight mb-8">
+                <h2 className="font-serif font-extralight text-[#1A1A1A] text-4xl md:text-5xl leading-tight mb-8">
                   Greek at Rio.
                 </h2>
                 <p className="text-[#6F6A5F] font-light text-sm leading-loose max-w-sm mb-10">
@@ -411,7 +411,7 @@ export default function HomePage() {
               <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-8">
                 As Linhas
               </p>
-              <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-tight mb-8">
+              <h2 className="font-serif font-extralight text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-tight mb-8">
                 Cada nome carrega<br />um propósito.
               </h2>
               <p className="text-[#8C7A5B] font-light text-sm leading-loose max-w-lg mx-auto">
@@ -432,8 +432,8 @@ export default function HomePage() {
                   <div className="w-2 h-2 rounded-full bg-[#0D0D0D] ring-1 ring-[#F5F1E8]/15" />
                   <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Preta</span>
                 </div>
-                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΑΡΕΤΗ</h3>
-                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Areté — Excelência</p>
+                <h3 className="font-serif font-extralight text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΑΡΕΤΗ</h3>
+                <p className="font-serif font-extralight text-[#C2A27C] text-lg tracking-wide mb-8">Areté — Excelência</p>
                 <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
                   Na Grécia antiga, Areté era a virtude suprema — a busca
                   constante pela excelência em tudo o que se faz. Não
@@ -450,8 +450,8 @@ export default function HomePage() {
                   <div className="w-2 h-2 rounded-full bg-[#5C6B4A]" />
                   <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Verde Oliva</span>
                 </div>
-                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΣΩΜΑ</h3>
-                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Soma — Corpo</p>
+                <h3 className="font-serif font-extralight text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΣΩΜΑ</h3>
+                <p className="font-serif font-extralight text-[#C2A27C] text-lg tracking-wide mb-8">Soma — Corpo</p>
                 <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
                   Para os gregos, o Soma era sagrado — não apenas carne
                   e osso, mas o templo onde a alma habita. Honrar o corpo
@@ -468,8 +468,8 @@ export default function HomePage() {
                   <div className="w-2 h-2 rounded-full bg-[#E2D6C6]" />
                   <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Creme</span>
                 </div>
-                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΔΥΝΑΜΙΣ</h3>
-                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Dynamis — Força</p>
+                <h3 className="font-serif font-extralight text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΔΥΝΑΜΙΣ</h3>
+                <p className="font-serif font-extralight text-[#C2A27C] text-lg tracking-wide mb-8">Dynamis — Força</p>
                 <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
                   Aristóteles definiu Dynamis como a potência que existe
                   antes do ato — a força latente que precede cada movimento.
@@ -486,8 +486,8 @@ export default function HomePage() {
                   <div className="w-2 h-2 rounded-full bg-[#B8654A]" />
                   <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Terracota</span>
                 </div>
-                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΚΙΝΗΣΙΣ</h3>
-                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Kinesis — Movimento</p>
+                <h3 className="font-serif font-extralight text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΚΙΝΗΣΙΣ</h3>
+                <p className="font-serif font-extralight text-[#C2A27C] text-lg tracking-wide mb-8">Kinesis — Movimento</p>
                 <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
                   Para os filósofos gregos, Kinesis era a essência da
                   vida — tudo que vive, se move. Não existe corpo sem
@@ -518,7 +518,7 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
             <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-14">Nossa Filosofia</p>
-            <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-[1.15] mb-12">
+            <h2 className="font-serif font-extralight text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-[1.15] mb-12">
               O corpo não é<br />uma máquina.<br />É uma paisagem.
             </h2>
             <p className="text-[#8C7A5B] font-light text-[13px] leading-[2] max-w-md mx-auto">
@@ -544,7 +544,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-20">
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
-              <p className="font-serif font-light italic text-[#1A1A1A] text-xl mb-4 tracking-wide">GreekFit</p>
+              <p className="font-serif font-extralight text-[#1A1A1A] text-xl mb-4 tracking-wide">GreekFit</p>
               <p className="text-[#6F6A5F]/70 text-[10px] leading-[1.8] font-light max-w-[200px]">
                 Not just a fitwear.<br />
                 Luz mediterrânea. Energia brasileira.

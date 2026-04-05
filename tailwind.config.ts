@@ -20,7 +20,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-cormorant)', 'Cormorant Garamond', 'Georgia', 'serif'],
+        serif: ['var(--font-outfit)', 'Outfit', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         widest: '0.3em',

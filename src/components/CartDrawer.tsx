@@ -142,7 +142,7 @@ export default function CartDrawer() {
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-6 border-b border-[#E6DFD2]">
               <div className="flex items-center gap-3">
-                <span className="font-serif font-light text-[#1A1A1A] text-lg italic">Sua Sacola</span>
+                <span className="font-serif font-extralight text-[#1A1A1A] text-lg">Sua Sacola</span>
                 {itemCount > 0 && (
                   <span className="text-[#A88F6A] text-[10px] tracking-wide">({itemCount})</span>
                 )}

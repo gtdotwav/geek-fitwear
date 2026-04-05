@@ -230,10 +230,10 @@ export default function DynamisPage() {
         {/* ─── Collection Header ─── */}
         <div className="text-center mb-16">
           <p className="text-[#6F6A5F] text-[9px] tracking-[0.5em] uppercase mb-4">Coleção Exclusiva</p>
-          <h1 className="font-serif font-light text-[#1A1A1A] text-6xl md:text-8xl tracking-wide mb-3">
+          <h1 className="font-serif font-extralight text-[#1A1A1A] text-6xl md:text-8xl tracking-wide mb-3">
             ΔΥΝΑΜΙΣ
           </h1>
-          <p className="font-serif font-light italic text-[#A88F6A] text-xl md:text-2xl tracking-wide mb-6">
+          <p className="font-serif font-extralight text-[#A88F6A] text-xl md:text-2xl tracking-wide mb-6">
             Força
           </p>
           <div className="flex items-center justify-center gap-4">
@@ -295,7 +295,7 @@ export default function DynamisPage() {
               <p className="text-[#6F6A5F] text-[9px] tracking-[0.35em] uppercase mb-2">
                 ΔΥΝΑΜΙΣ · {piece.subtitle}
               </p>
-              <h2 className="font-serif font-light text-[#1A1A1A] text-4xl md:text-5xl italic tracking-tight leading-tight">
+              <h2 className="font-serif font-extralight text-[#1A1A1A] text-4xl md:text-5xl tracking-tight leading-tight">
                 {piece.label} ΔΥΝΑΜΙΣ
               </h2>
             </div>
@@ -507,7 +507,7 @@ export default function DynamisPage() {
         <div className="mt-28 border-t border-[#E6DFD2] pt-16">
           <div className="text-center mb-12">
             <p className="text-[#6F6A5F] text-[9px] tracking-[0.4em] uppercase mb-2">Galeria</p>
-            <h2 className="font-serif font-light italic text-[#1A1A1A] text-3xl">ΔΥΝΑΜΙΣ em Detalhe</h2>
+            <h2 className="font-serif font-extralight text-[#1A1A1A] text-3xl">ΔΥΝΑΜΙΣ em Detalhe</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {[
