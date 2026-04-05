@@ -39,7 +39,7 @@ export default function HomePage() {
             </p>
             <div className="flex items-center justify-center gap-4 mt-8">
               <div className="h-px w-12 bg-[#C2A27C]" />
-              <span className="text-[#6F6A5F] text-[9px] tracking-[0.4em] uppercase">GreekFit · Coleção 2025</span>
+              <span className="text-[#6F6A5F] text-[9px] tracking-[0.4em] uppercase font-light">GreekFit · Coleção 2025</span>
               <div className="h-px w-12 bg-[#C2A27C]" />
             </div>
           </Reveal>
@@ -58,19 +58,18 @@ export default function HomePage() {
           {/* Asymmetric editorial layout */}
           <div className="grid grid-cols-12 gap-4 md:gap-6">
 
-            {/* Large left */}
+            {/* Large left — GREEK WEEK group */}
             <Reveal className="col-span-12 md:col-span-7" delay={0}>
               <Link href="#collection" className="group block relative overflow-hidden aspect-[4/5] md:aspect-[3/4]">
                 <img
-                  src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=900&q=85"
-                  alt="Legging"
+                  src="/banners/6.png"
+                  alt="Greek Week Collection"
                   className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
-                  style={{ filter: 'saturate(0.85) brightness(0.95) sepia(0.05)' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-7 left-7">
-                  <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-1 opacity-80">Legging</p>
-                  <p className="text-[#F5F1E8] font-serif font-light italic text-2xl">Linha Aegean</p>
+                  <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-1 opacity-80">Todas as linhas</p>
+                  <p className="text-[#F5F1E8] font-serif font-light italic text-2xl">ΑΡΕΤΗ · ΣΩΜΑ · ΔΥΝΑΜΙΣ</p>
                 </div>
               </Link>
             </Reveal>
@@ -80,35 +79,50 @@ export default function HomePage() {
               <Reveal delay={0.1}>
                 <Link href="#collection" className="group block relative overflow-hidden aspect-[4/3]">
                   <img
-                    src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=700&q=85"
-                    alt="Top"
+                    src="/banners/11.png"
+                    alt="Greek Lifestyle"
                     className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
-                    style={{ filter: 'saturate(0.85) brightness(0.95) sepia(0.05)' }}
                   />
                   <div className="absolute bottom-5 left-5">
-                    <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Top</p>
-                    <p className="text-[#F5F1E8] font-serif font-light italic text-xl">Série Island</p>
+                    <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Lifestyle</p>
+                    <p className="text-[#F5F1E8] font-serif font-light italic text-xl">Movimento & Fluidez</p>
                   </div>
                 </Link>
               </Reveal>
 
               <Reveal delay={0.18}>
-                <Link href="#collection" className="group block relative overflow-hidden aspect-[4/3]">
+                <Link href="/produto/dynamis" className="group block relative overflow-hidden aspect-[4/3]">
                   <img
-                    src="https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=700&q=85"
-                    alt="Set"
+                    src="/banners/14.png"
+                    alt="ΔΥΝΑΜΙΣ Collection"
                     className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
-                    style={{ filter: 'saturate(0.85) brightness(0.95) sepia(0.05)' }}
                   />
                   <div className="absolute bottom-5 left-5">
-                    <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Conjunto</p>
-                    <p className="text-[#F5F1E8] font-serif font-light italic text-xl">Santorini</p>
+                    <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Nova Coleção</p>
+                    <p className="text-[#F5F1E8] font-serif font-light italic text-xl">ΔΥΝΑΜΙΣ</p>
                   </div>
                 </Link>
               </Reveal>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ─── Greek Week Promo Banner ───────────────────────────────── */}
+      <section className="bg-[#F5F1E8]">
+        <Reveal>
+          <Link href="#collection" className="group block relative overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12">
+              <div className="relative overflow-hidden rounded-sm">
+                <img
+                  src="/banners/3.png"
+                  alt="Greek Week — Not just a fitwear"
+                  className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-1000"
+                />
+              </div>
+            </div>
+          </Link>
+        </Reveal>
       </section>
 
       {/* ─── ΔΥΝΑΜΙΣ Collection Feature ──────────────────────────────── */}
@@ -155,7 +169,24 @@ export default function HomePage() {
         <ProductGrid />
       </div>
 
-      {/* ─── Campaign / Lifestyle section ───────────────────────────── */}
+      {/* ─── Greek Week Sale Banner ────────────────────────────────── */}
+      <section className="bg-[#F5F1E8] py-6">
+        <Reveal>
+          <Link href="#collection" className="group block">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12">
+              <div className="relative overflow-hidden rounded-sm">
+                <img
+                  src="/banners/4.png"
+                  alt="Greek Week — Up to 30% off"
+                  className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-1000"
+                />
+              </div>
+            </div>
+          </Link>
+        </Reveal>
+      </section>
+
+      {/* ─── Campaign / Rio section ───────────────────────────────── */}
       <section id="campaign" className="bg-[#E6DFD2]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -164,10 +195,9 @@ export default function HomePage() {
             <Reveal className="aspect-[4/5] lg:aspect-auto lg:min-h-[640px]">
               <div className="relative w-full h-full overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=900&q=85"
-                  alt="Campaign"
+                  src="/banners/7.png"
+                  alt="Greek at Rio Campaign"
                   className="w-full h-full object-cover"
-                  style={{ filter: 'saturate(0.8) brightness(0.92) sepia(0.08)' }}
                 />
               </div>
             </Reveal>
@@ -179,12 +209,12 @@ export default function HomePage() {
                   Campanha 2025
                 </p>
                 <h2 className="font-serif font-light italic text-[#1A1A1A] text-4xl md:text-5xl leading-tight mb-8">
-                  Onde a pedra<br />encontra o mar.
+                  Greek at Rio.
                 </h2>
                 <p className="text-[#6F6A5F] font-light text-sm leading-loose max-w-sm mb-10">
-                  Inspirada na arquitetura crua da costa Egeia.
-                  Cada peça carrega o silêncio do calcário, o calor
-                  da terracota e a liberdade das águas abertas.
+                  Da costa egeia à orla carioca. Três linhas, três mulheres,
+                  três formas de mover-se. ΑΡΕΤΗ, ΣΩΜΑ e ΔΥΝΑΜΙΣ
+                  encontram o sol do Rio de Janeiro.
                 </p>
                 <Link
                   href="#collection"
@@ -192,6 +222,51 @@ export default function HomePage() {
                 >
                   Explorar a coleção
                 </Link>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Rio Beach Full-width Banner ──────────────────────────── */}
+      <section>
+        <Reveal>
+          <div className="relative overflow-hidden">
+            <img
+              src="/banners/8.png"
+              alt="Not just a fitwear — Rio de Janeiro"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ─── Mediterranean Lookbook Grid ──────────────────────────── */}
+      <section className="bg-[#F5F1E8] py-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <Reveal>
+            <p className="text-[#6F6A5F] text-[9px] tracking-[0.45em] uppercase text-center mb-14">
+              Lookbook
+            </p>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <Reveal delay={0}>
+              <div className="relative overflow-hidden aspect-[16/10]">
+                <img
+                  src="/banners/9.png"
+                  alt="Greek at Rio — Beach workout"
+                  className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-1000"
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="relative overflow-hidden aspect-[16/10]">
+                <img
+                  src="/banners/12.png"
+                  alt="Greek — Yoga retreat"
+                  className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-1000"
+                />
               </div>
             </Reveal>
           </div>
@@ -231,7 +306,7 @@ export default function HomePage() {
             <div className="col-span-2 md:col-span-1">
               <p className="font-serif font-light italic text-[#1A1A1A] text-xl mb-4">GreekFit</p>
               <p className="text-[#6F6A5F] text-[10px] leading-relaxed font-light max-w-[180px]">
-                Roupas fitness premium. Luz mediterrânea. Energia brasileira.
+                Not just a fitwear. Luz mediterrânea. Energia brasileira.
               </p>
             </div>
 

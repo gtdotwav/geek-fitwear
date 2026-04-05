@@ -2,23 +2,32 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 
 const slides = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1800&q=90',
-    line: 'Vista o sol.',
+    image: '/banners/1.png',
+    line: 'Not just a fitwear.',
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1800&q=90',
-    line: 'Mova-se como a água.',
+    image: '/banners/2.png',
+    line: '',
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1800&q=90',
-    line: 'Feito de luz.',
+    image: '/banners/5.png',
+    line: '',
+  },
+  {
+    id: 4,
+    image: '/banners/13.png',
+    line: '',
+  },
+  {
+    id: 5,
+    image: '/banners/10.png',
+    line: '',
   },
 ];
 
@@ -49,41 +58,14 @@ export default function HeroSlider() {
         >
           <img
             src={slides[current].image}
-            alt=""
+            alt="Greek Fitwear Campaign"
             className="w-full h-full object-cover"
-            style={{ filter: 'brightness(0.78) saturate(0.9) sepia(0.08)' }}
           />
         </motion.div>
       </AnimatePresence>
 
-      {/* Warm overlay — subtle sand tone */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-
-      {/* Center text */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={`line-${current}`}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="font-serif font-light text-[#F5F1E8] text-5xl md:text-7xl lg:text-8xl tracking-tight italic"
-          >
-            {slides[current].line}
-          </motion.p>
-        </AnimatePresence>
-
-        {/* Brand tag below */}
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="mt-8 text-[#F5F1E8]/50 text-[9px] tracking-[0.45em] uppercase font-light"
-        >
-          GreekFit — SS 2025
-        </motion.span>
-      </div>
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20" />
 
       {/* Bottom: scroll cue + dots */}
       <div className="absolute bottom-8 left-0 right-0 flex items-center justify-between px-8 lg:px-12">
