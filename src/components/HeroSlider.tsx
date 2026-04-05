@@ -25,36 +25,25 @@ export default function HeroSlider() {
   return (
     <section
       data-hero
-      className="relative w-full overflow-hidden bg-[#2B2B2B] md:h-[85vh] lg:h-screen"
+      className="relative w-full aspect-[2752/1536] md:aspect-auto md:h-[85vh] lg:h-screen overflow-hidden"
     >
-      {/* Images — crossfade */}
+      {/* Images — crossfade (always absolute for smooth transitions) */}
       <AnimatePresence mode="sync">
         <motion.div
           key={current}
-          className="w-full md:absolute md:inset-0"
+          className="absolute inset-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.4, ease: 'easeInOut' }}
         >
-          {/* Mobile: full image, no crop, no bars */}
-          <Image
-            src={slides[current].image}
-            alt={`GreekFit Campaign — Slide ${current + 1}`}
-            width={2752}
-            height={1536}
-            sizes="100vw"
-            priority={current === 0}
-            className="w-full h-auto block md:hidden"
-          />
-          {/* Desktop: fill viewport, crop edges */}
           <Image
             src={slides[current].image}
             alt={`GreekFit Campaign — Slide ${current + 1}`}
             fill
             sizes="100vw"
             priority={current === 0}
-            className="object-cover hidden md:block"
+            className="object-cover"
           />
         </motion.div>
       </AnimatePresence>
@@ -62,9 +51,8 @@ export default function HeroSlider() {
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20 pointer-events-none" />
 
-      {/* Bottom: scroll cue + dots */}
-      <div className="absolute bottom-4 md:bottom-8 left-0 right-0 flex items-center justify-between px-6 md:px-8 lg:px-12">
-        {/* Slide dots */}
+      {/* Bottom: dots + scroll cue */}
+      <div className="absolute bottom-3 md:bottom-8 left-0 right-0 flex items-center justify-between px-5 md:px-8 lg:px-12">
         <div className="flex items-center gap-2" role="tablist" aria-label="Slides do banner">
           {slides.map((_, i) => (
             <button
@@ -82,7 +70,6 @@ export default function HeroSlider() {
           ))}
         </div>
 
-        {/* Scroll cue — hidden on mobile since hero is shorter */}
         <div className="hidden md:flex flex-col items-center gap-2">
           <span className="text-[#F5F1E8]/40 text-[8px] tracking-[0.4em] uppercase">Rolar</span>
           <motion.div
