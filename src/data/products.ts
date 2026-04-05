@@ -22,9 +22,9 @@ export interface Product {
   washing: string;
 }
 
-export type Category = 'Todos' | 'Legging' | 'Top' | 'Set';
+export type Category = 'Todos' | 'Legging' | 'Top' | 'Shorts' | 'Set';
 
-export const categories: Category[] = ['Todos', 'Legging', 'Top', 'Set'];
+export const categories: Category[] = ['Todos', 'Legging', 'Top', 'Shorts', 'Set'];
 
 export const products: Product[] = [
 
@@ -334,5 +334,102 @@ export const products: Product[] = [
     features: ['Top Corfu + Legging Mykonos', 'Alça com nó frontal', 'Cintura alta modeladora', 'Tecido sculpting 4-way', 'Cores pastéis exclusivas'],
     details: 'Set coleção SS 2024. Top com bojo fixo + Legging 7/8. Composição: 76% Poliamida, 24% Elastano.',
     washing: 'Lavar à mão com água fria. Secar à sombra. Não usar amaciante.',
+  },
+
+  // ─── ΑΡΕΤΗ (ARETH) — LINHA PRETA ─────────────────────────────────────────
+
+  {
+    id: 'areth-top-preto',
+    name: 'Top ΑΡΕΤΗ',
+    category: 'Top',
+    tag: 'Novo',
+    originalPrice: 229,
+    pixPrice: 183,
+    installments: { count: 12, value: 19.08 },
+    sizes: ['P', 'M', 'G', 'GG'],
+    colors: [
+      { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/top-closeup.png', backImage: '/products/areth/shorts-studio.png' },
+    ],
+    description: 'O top essencial da linha ΑΡΕΤΗ. Suporte médio-alto com faixa inferior com logo ΑΡΕΤΗ em relevo. Design racerback para máxima liberdade de movimento. A excelência no seu estado mais puro.',
+    stock: 20,
+    features: ['Suporte médio-alto', 'Bojo removível', 'Alças racerback cruzadas', 'Logo ΑΡΕΤΗ em relevo na faixa', 'Tecido segunda pele ultra-macio'],
+    details: 'Composição: 82% Poliamida, 18% Elastano. Faixa inferior com logo em silicone tonal. Bojo EVA destacável. Costura ultraplana.',
+    washing: 'Lavar à mão com água fria. Remover bojo antes de lavar. Não usar alvejante. Secar à sombra.',
+  },
+
+  {
+    id: 'areth-shorts-preto',
+    name: 'Shorts ΑΡΕΤΗ',
+    category: 'Shorts',
+    tag: 'Novo',
+    originalPrice: 199,
+    pixPrice: 159,
+    installments: { count: 12, value: 16.58 },
+    sizes: ['P', 'M', 'G', 'GG'],
+    colors: [
+      { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/shorts-stand.png', backImage: '/products/areth/shorts-chair.png' },
+    ],
+    description: 'Shorts de cintura alta da linha ΑΡΕΤΗ. Comprimento ideal para treino funcional e musculação, com logo ΑΡΕΤΗ discreto no cós. Compressão modeladora sem restringir o movimento.',
+    stock: 18,
+    features: ['Cintura alta modeladora', 'Logo ΑΡΕΤΗ no cós', 'Comprimento mid-thigh', 'Não sobe durante o treino', 'Tecido Sculpting 4-Way Stretch'],
+    details: 'Composição: 76% Poliamida, 24% Elastano. Cós duplo de 8cm com logo em silicone. Comprimento 15cm de entrepernas. Costura flat.',
+    washing: 'Lavar à mão ou máquina com água fria. Não usar alvejante. Secar à sombra. Não torcer.',
+  },
+
+  {
+    id: 'areth-legging-preto',
+    name: 'Legging ΑΡΕΤΗ',
+    category: 'Legging',
+    tag: 'Novo',
+    originalPrice: 259,
+    pixPrice: 207,
+    installments: { count: 12, value: 21.58 },
+    sizes: ['P', 'M', 'G', 'GG'],
+    colors: [
+      { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/legging-front.png', backImage: '/products/areth/legging-walk.png' },
+    ],
+    description: 'Legging full-length da linha ΑΡΕΤΗ. Cintura alta com logo ΑΡΕΤΗ no cós, compressão sculpting que modela e acompanha cada movimento. Elegância absoluta do treino ao dia a dia.',
+    stock: 22,
+    features: ['Cintura alta modeladora 10cm', 'Logo ΑΡΕΤΗ no cós', 'Compressão Sculpting 4-Way Stretch', 'Não fica transparente', 'Secagem ultrarrápida'],
+    details: 'Composição: 76% Poliamida, 24% Elastano. Cós duplo com logo em silicone tonal. Comprimento full-length. Costura ultraplana sem atrito.',
+    washing: 'Lavar à mão ou máquina com água fria. Não usar alvejante. Não torcer. Secar à sombra.',
+  },
+
+  {
+    id: 'areth-set-legging-preto',
+    name: 'Set ΑΡΕΤΗ Completo',
+    category: 'Set',
+    tag: 'Novo',
+    originalPrice: 459,
+    pixPrice: 367,
+    installments: { count: 12, value: 38.25 },
+    sizes: ['P', 'M', 'G', 'GG'],
+    colors: [
+      { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/legging-full.png', backImage: '/products/areth/set-grid.png' },
+    ],
+    description: 'O conjunto completo ΑΡΕΤΗ: Top + Legging coordenados em preto absoluto. Logo tonal em ambas as peças. A simetria perfeita entre virtude e movimento. Feito para quem busca excelência.',
+    stock: 15,
+    features: ['Top ΑΡΕΤΗ + Legging ΑΡΕΤΗ coordenados', 'Logo tonal em silicone em ambas as peças', 'Tecido Sculpting 4-Way Stretch', 'Cintura alta modeladora', 'Bojo removível no top'],
+    details: 'Set completo: Top ΑΡΕΤΗ + Legging ΑΡΕΤΗ. Mesma composição e lote de tingimento. 82% Poliamida, 18% Elastano (top) / 76% Poliamida, 24% Elastano (legging).',
+    washing: 'Lavar à mão com água fria. Remover bojo antes de lavar. Secar à sombra. Não usar amaciante.',
+  },
+
+  {
+    id: 'areth-set-shorts-preto',
+    name: 'Set ΑΡΕΤΗ Shorts',
+    category: 'Set',
+    tag: 'Novo',
+    originalPrice: 399,
+    pixPrice: 319,
+    installments: { count: 12, value: 33.25 },
+    sizes: ['P', 'M', 'G', 'GG'],
+    colors: [
+      { name: 'Preto', hex: '#0D0D0D', image: '/products/areth/shorts-stand.png', backImage: '/products/areth/shorts-studio.png' },
+    ],
+    description: 'Conjunto ΑΡΕΤΗ versão shorts: Top + Shorts coordenados em preto. Ideal para treinos de alta intensidade e dias quentes. A mesma excelência, com mais liberdade.',
+    stock: 16,
+    features: ['Top ΑΡΕΤΗ + Shorts ΑΡΕΤΗ coordenados', 'Logo tonal em silicone em ambas as peças', 'Shorts mid-thigh que não sobe', 'Suporte médio-alto no top', 'Costura flat sem atrito'],
+    details: 'Set completo: Top ΑΡΕΤΗ + Shorts ΑΡΕΤΗ. Mesma composição e lote. 82% Poliamida, 18% Elastano (top) / 76% Poliamida, 24% Elastano (shorts).',
+    washing: 'Lavar à mão com água fria. Remover bojo antes de lavar. Secar à sombra.',
   },
 ];

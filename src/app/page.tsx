@@ -111,6 +111,45 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── ΔΥΝΑΜΙΣ Collection Feature ──────────────────────────────── */}
+      <section className="bg-[#F5F1E8] py-20 border-t border-[#E6DFD2]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <Reveal>
+            <Link href="/produto/dynamis" className="group block">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden bg-[#1A1A1A]">
+                {/* Image */}
+                <div className="aspect-[3/4] lg:aspect-auto lg:min-h-[600px] overflow-hidden relative">
+                  <img
+                    src="/products/dynamis/1.png"
+                    alt="ΔΥΝΑΜΙΣ Collection"
+                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                  />
+                </div>
+                {/* Text */}
+                <div className="flex items-center justify-center px-10 py-16 lg:py-0 lg:px-16">
+                  <div className="text-center">
+                    <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-6">Nova Coleção</p>
+                    <h2 className="font-serif font-light text-[#F5F1E8] text-6xl md:text-7xl tracking-wide mb-3">
+                      ΔΥΝΑΜΙΣ
+                    </h2>
+                    <p className="font-serif font-light italic text-[#A88F6A] text-xl tracking-wide mb-8">
+                      Força
+                    </p>
+                    <p className="text-[#8C7A5B] font-light text-sm leading-loose max-w-xs mx-auto mb-10">
+                      Top, Shorts, Legging ou Conjunto Completo.
+                      Escolha sua peça. Escolha seu estilo — Logobox ou Clean.
+                    </p>
+                    <span className="text-[#C2A27C] text-[9px] tracking-[0.35em] uppercase border-b border-[#C2A27C]/40 group-hover:border-[#C2A27C] pb-1 transition-colors">
+                      Explorar a coleção
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ─── Product grid ───────────────────────────────────────────── */}
       <div className="border-t border-[#E6DFD2]">
         <ProductGrid />
