@@ -199,6 +199,113 @@ export default function HomePage() {
         </Reveal>
       </section>
 
+      {/* ─── Kit Gostosa Grega — Weekly Giveaway ─────────────────── */}
+      <section className="bg-[#1A1A1A] py-28 lg:py-36 overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12">
+
+          {/* Header */}
+          <Reveal>
+            <div className="text-center mb-6">
+              <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-8">
+                Sorteio Semanal
+              </p>
+              <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.15] mb-4">
+                Kit Gostosa Grega.
+              </h2>
+              <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">
+                Toda semana, uma de vocês leva.
+              </p>
+              <p className="text-[#8C7A5B] font-light text-[13px] leading-[2] max-w-lg mx-auto mb-4">
+                A cada compra realizada na semana, você entra automaticamente
+                no sorteio do nosso kit exclusivo. Bolsa GREEK, garrafa térmica,
+                case de celular, toalha de treino e fones — tudo no tom que
+                só a GreekFit tem. Um kit pensado para quem vive o lifestyle,
+                não só veste.
+              </p>
+              <p className="text-[#F5F1E8]/40 font-light text-[11px] leading-[1.8] max-w-sm mx-auto">
+                Comprou? Já está concorrendo.<br />
+                Uma sortuda por semana. Toda sexta no nosso Instagram.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Kit images — editorial grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-16">
+            <Reveal delay={0}>
+              <div className="relative overflow-hidden aspect-[4/5] group">
+                <Image
+                  src="/kit/1.png"
+                  alt="Kit Gostosa Grega — Bolsa, garrafa, case e fones"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <div className="relative overflow-hidden aspect-[4/5] group">
+                <Image
+                  src="/kit/2.png"
+                  alt="Kit Gostosa Grega — Tote bag GREEK com acessórios"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={0.16}>
+              <div className="relative overflow-hidden aspect-[4/5] group">
+                <Image
+                  src="/kit/3.png"
+                  alt="Kit Gostosa Grega — Knot bag GREEK com garrafa"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={0.24}>
+              <div className="relative overflow-hidden aspect-[4/5] group">
+                <Image
+                  src="/kit/4.png"
+                  alt="Kit Gostosa Grega — Leather tote GREEK completo"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                />
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Kit items list */}
+          <Reveal delay={0.3}>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-12">
+              {['Bolsa GREEK', 'Garrafa Térmica', 'Case de Celular', 'Toalha de Treino', 'Fones Wireless'].map((item, i) => (
+                <div key={item} className="flex items-center gap-2">
+                  {i > 0 && <span className="text-[#C2A27C]/30 hidden sm:inline">·</span>}
+                  <span className="text-[#8C7A5B]/70 text-[9px] tracking-[0.3em] uppercase font-light">{item}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* CTA */}
+          <Reveal delay={0.35}>
+            <div className="text-center mt-14">
+              <Link
+                href="#collection"
+                className="inline-block bg-[#C2A27C] hover:bg-[#A88F6A] text-[#1A1A1A] px-10 py-4 text-[9px] tracking-[0.35em] uppercase font-medium transition-colors duration-300"
+              >
+                Comprar e Concorrer
+              </Link>
+              <p className="text-[#F5F1E8]/20 text-[8px] tracking-[0.3em] uppercase mt-6">
+                Válido para compras a partir de R$ 95
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ─── Campaign / Rio section ───────────────────────────────── */}
       <section id="campaign" className="bg-[#E6DFD2]">
         <div className="max-w-7xl mx-auto">
