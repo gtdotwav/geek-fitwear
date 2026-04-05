@@ -31,17 +31,17 @@ export default function HomePage() {
       <HeroSlider />
 
       {/* ─── Manifesto strip ────────────────────────────────────────── */}
-      <section className="bg-[#F5F1E8] py-20 border-b border-[#E6DFD2]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="bg-[#F5F1E8] py-24 lg:py-32 border-b border-[#E6DFD2]">
+        <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
-            <p className="font-serif font-light italic text-[#1A1A1A] text-2xl md:text-3xl lg:text-4xl leading-relaxed tracking-wide">
+            <p className="font-serif font-light italic text-[#1A1A1A] text-2xl md:text-[28px] lg:text-4xl leading-[1.6] tracking-wide">
               "Feito onde o sol encontra a pedra —<br />
               para corpos que se movem com intenção."
             </p>
-            <div className="flex items-center justify-center gap-4 mt-8">
-              <div className="h-px w-12 bg-[#C2A27C]" />
-              <span className="text-[#6F6A5F] text-[9px] tracking-[0.4em] uppercase font-light">GreekFit · Coleção 2025</span>
-              <div className="h-px w-12 bg-[#C2A27C]" />
+            <div className="flex items-center justify-center gap-4 mt-10">
+              <div className="h-px w-12 bg-[#C2A27C]/60" />
+              <span className="text-[#6F6A5F]/70 text-[8px] tracking-[0.45em] uppercase font-light">GreekFit · Coleção 2025</span>
+              <div className="h-px w-12 bg-[#C2A27C]/60" />
             </div>
           </Reveal>
         </div>
@@ -72,7 +72,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-7 left-7">
                   <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-1 opacity-80">Todas as linhas</p>
-                  <p className="text-[#F5F1E8] font-serif font-light italic text-2xl">ΑΡΕΤΗ · ΣΩΜΑ · ΔΥΝΑΜΙΣ</p>
+                  <p className="text-[#F5F1E8] font-serif font-light italic text-2xl">ΑΡΕΤΗ · ΣΩΜΑ · ΔΥΝΑΜΙΣ · ΚΙΝΗΣΙΣ</p>
                 </div>
               </Link>
             </Reveal>
@@ -227,8 +227,8 @@ export default function HomePage() {
                   Greek at Rio.
                 </h2>
                 <p className="text-[#6F6A5F] font-light text-sm leading-loose max-w-sm mb-10">
-                  Da costa egeia à orla carioca. Três linhas, três mulheres,
-                  três formas de mover-se. ΑΡΕΤΗ, ΣΩΜΑ e ΔΥΝΑΜΙΣ
+                  Da costa egeia à orla carioca. Quatro linhas, quatro intenções,
+                  quatro formas de mover-se. ΑΡΕΤΗ, ΣΩΜΑ, ΔΥΝΑΜΙΣ e ΚΙΝΗΣΙΣ
                   encontram o sol do Rio de Janeiro.
                 </p>
                 <Link
@@ -259,10 +259,10 @@ export default function HomePage() {
       </section>
 
       {/* ─── Mediterranean Lookbook Grid ──────────────────────────── */}
-      <section className="bg-[#F5F1E8] py-20">
+      <section className="bg-[#F5F1E8] py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <Reveal>
-            <p className="text-[#6F6A5F] text-[9px] tracking-[0.45em] uppercase text-center mb-14">
+            <p className="text-[#6F6A5F]/70 text-[9px] tracking-[0.45em] uppercase text-center mb-14">
               Lookbook
             </p>
           </Reveal>
@@ -294,40 +294,153 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── Philosophy ─────────────────────────────────────────────── */}
-      <section id="philosophy" className="bg-[#2B2B2B] py-32">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      {/* ─── As Linhas — Greek Naming Section ──────────────────────── */}
+      <section className="bg-[#1A1A1A] py-32 lg:py-40">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12">
+
+          {/* Section header */}
           <Reveal>
-            <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-12">Nossa Filosofia</p>
-            <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-tight mb-10">
-              O corpo não é uma máquina.<br />É uma paisagem.
+            <div className="text-center mb-20 lg:mb-28">
+              <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-8">
+                As Linhas
+              </p>
+              <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-tight mb-8">
+                Cada nome carrega<br />um propósito.
+              </h2>
+              <p className="text-[#8C7A5B] font-light text-sm leading-loose max-w-lg mx-auto">
+                Nossas coleções levam nomes em grego antigo — a língua
+                que primeiro nomeou a busca por excelência do corpo e da mente.
+                Cada palavra é uma intenção vestida.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Lines grid — 2x2 with fine dividers */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#F5F1E8]/[0.06]">
+
+            {/* ΑΡΕΤΗ */}
+            <Reveal delay={0}>
+              <div className="bg-[#1A1A1A] p-10 lg:p-14">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-2 h-2 rounded-full bg-[#0D0D0D] ring-1 ring-[#F5F1E8]/15" />
+                  <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Preta</span>
+                </div>
+                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΑΡΕΤΗ</h3>
+                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Areté — Excelência</p>
+                <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
+                  Na Grécia antiga, Areté era a virtude suprema — a busca
+                  constante pela excelência em tudo o que se faz. Não
+                  perfeição, mas a melhor versão possível de si.
+                  Vestir ΑΡΕΤΗ é vestir essa intenção.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* ΣΩΜΑ */}
+            <Reveal delay={0.08}>
+              <div className="bg-[#1A1A1A] p-10 lg:p-14">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-2 h-2 rounded-full bg-[#5C6B4A]" />
+                  <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Verde Oliva</span>
+                </div>
+                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΣΩΜΑ</h3>
+                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Soma — Corpo</p>
+                <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
+                  Para os gregos, o Soma era sagrado — não apenas carne
+                  e osso, mas o templo onde a alma habita. Honrar o corpo
+                  era honrar a vida. ΣΩΜΑ celebra o corpo como paisagem,
+                  não como máquina.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* ΔΥΝΑΜΙΣ */}
+            <Reveal delay={0.16}>
+              <div className="bg-[#1A1A1A] p-10 lg:p-14">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-2 h-2 rounded-full bg-[#E2D6C6]" />
+                  <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Creme</span>
+                </div>
+                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΔΥΝΑΜΙΣ</h3>
+                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Dynamis — Força</p>
+                <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
+                  Aristóteles definiu Dynamis como a potência que existe
+                  antes do ato — a força latente que precede cada movimento.
+                  ΔΥΝΑΜΙΣ é para quem sabe que a verdadeira força
+                  é silenciosa.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* ΚΙΝΗΣΙΣ */}
+            <Reveal delay={0.24}>
+              <div className="bg-[#1A1A1A] p-10 lg:p-14">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-2 h-2 rounded-full bg-[#B8654A]" />
+                  <span className="text-[#F5F1E8]/25 text-[8px] tracking-[0.4em] uppercase">Linha Terracota</span>
+                </div>
+                <h3 className="font-serif font-light text-[#F5F1E8] text-4xl lg:text-5xl tracking-wide mb-2">ΚΙΝΗΣΙΣ</h3>
+                <p className="font-serif italic text-[#C2A27C] text-lg tracking-wide mb-8">Kinesis — Movimento</p>
+                <p className="text-[#8C7A5B] font-light text-[13px] leading-[1.9]">
+                  Para os filósofos gregos, Kinesis era a essência da
+                  vida — tudo que vive, se move. Não existe corpo sem
+                  movimento, nem movimento sem propósito. ΚΙΝΗΣΙΣ
+                  é a linha que veste a fluidez.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Bottom flourish */}
+          <Reveal delay={0.3}>
+            <div className="text-center mt-20">
+              <div className="flex items-center justify-center gap-4">
+                <div className="h-px w-10 bg-[#C2A27C]/20" />
+                <span className="text-[#8C7A5B]/60 text-[8px] tracking-[0.5em] uppercase">
+                  Grego antigo · Filosofia viva
+                </span>
+                <div className="h-px w-10 bg-[#C2A27C]/20" />
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ─── Philosophy ─────────────────────────────────────────────── */}
+      <section id="philosophy" className="bg-[#2B2B2B] py-32 lg:py-40">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <Reveal>
+            <p className="text-[#C2A27C] text-[9px] tracking-[0.5em] uppercase mb-14">Nossa Filosofia</p>
+            <h2 className="font-serif font-light italic text-[#F5F1E8] text-4xl md:text-5xl lg:text-6xl leading-[1.15] mb-12">
+              O corpo não é<br />uma máquina.<br />É uma paisagem.
             </h2>
-            <p className="text-[#8C7A5B] font-light text-sm leading-loose max-w-xl mx-auto">
+            <p className="text-[#8C7A5B] font-light text-[13px] leading-[2] max-w-md mx-auto">
               A GreekFit nasceu da crença de que o movimento é sagrado.
               Que o que você veste durante sua prática deve honrar a
               inteligência do seu corpo — não limitá-la. Criamos com
               precisão, desenhamos com contenção e produzimos com cuidado.
             </p>
-            <div className="flex items-center justify-center gap-4 mt-14">
-              <div className="h-px w-10 bg-[#C2A27C]/40" />
-              <span className="text-[#8C7A5B] text-[8px] tracking-[0.5em] uppercase">
+            <div className="flex items-center justify-center gap-4 mt-16">
+              <div className="h-px w-10 bg-[#C2A27C]/30" />
+              <span className="text-[#8C7A5B]/60 text-[8px] tracking-[0.5em] uppercase">
                 Athens · São Paulo · 2025
               </span>
-              <div className="h-px w-10 bg-[#C2A27C]/40" />
+              <div className="h-px w-10 bg-[#C2A27C]/30" />
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* ─── Footer ─────────────────────────────────────────────────── */}
-      <footer className="bg-[#F5F1E8] border-t border-[#E6DFD2] py-16">
+      <footer className="bg-[#F5F1E8] border-t border-[#E6DFD2] py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-20">
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
-              <p className="font-serif font-light italic text-[#1A1A1A] text-xl mb-4">GreekFit</p>
-              <p className="text-[#6F6A5F] text-[10px] leading-relaxed font-light max-w-[180px]">
-                Not just a fitwear. Luz mediterrânea. Energia brasileira.
+              <p className="font-serif font-light italic text-[#1A1A1A] text-xl mb-4 tracking-wide">GreekFit</p>
+              <p className="text-[#6F6A5F]/70 text-[10px] leading-[1.8] font-light max-w-[200px]">
+                Not just a fitwear.<br />
+                Luz mediterrânea. Energia brasileira.
               </p>
             </div>
 
@@ -337,11 +450,11 @@ export default function HomePage() {
               { title: 'Empresa', links: ['Filosofia', 'Sustentabilidade', 'Imprensa', 'Carreiras'] },
             ].map(col => (
               <div key={col.title}>
-                <p className="text-[#1A1A1A] text-[9px] tracking-[0.3em] uppercase mb-5 font-medium">{col.title}</p>
-                <ul className="space-y-3">
+                <p className="text-[#1A1A1A] text-[9px] tracking-[0.3em] uppercase mb-6 font-medium">{col.title}</p>
+                <ul className="space-y-3.5">
                   {col.links.map(l => (
                     <li key={l}>
-                      <a href="#" className="text-[#6F6A5F] text-[10px] font-light tracking-wide hover:text-[#1A1A1A] transition-colors">
+                      <a href="#" className="text-[#6F6A5F]/70 text-[10px] font-light tracking-wide hover:text-[#1A1A1A] transition-colors duration-300">
                         {l}
                       </a>
                     </li>
@@ -352,13 +465,13 @@ export default function HomePage() {
           </div>
 
           {/* Bottom */}
-          <div className="border-t border-[#E6DFD2] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-[#6F6A5F] text-[9px] tracking-[0.2em] font-light">
+          <div className="border-t border-[#E6DFD2] pt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-[#6F6A5F]/50 text-[8px] tracking-[0.25em] font-light uppercase">
               © {new Date().getFullYear()} GreekFit. Todos os direitos reservados.
             </p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-8">
               {['Instagram', 'TikTok', 'Pinterest'].map(s => (
-                <a key={s} href="#" className="text-[#6F6A5F] text-[9px] tracking-[0.2em] uppercase hover:text-[#1A1A1A] transition-colors">
+                <a key={s} href="#" className="text-[#6F6A5F]/50 text-[8px] tracking-[0.25em] uppercase hover:text-[#1A1A1A] transition-colors duration-300">
                   {s}
                 </a>
               ))}
