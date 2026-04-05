@@ -12,20 +12,6 @@ const navLinks = [
   { label: 'Filosofia', href: '/#philosophy' },
 ];
 
-function Logo({ dark = false }: { dark?: boolean }) {
-  const textColor = dark ? 'text-[#F5F1E8]' : 'text-[#1A1A1A]';
-  const lineColor = dark ? 'bg-[#C2A27C]' : 'bg-[#A88F6A]';
-  return (
-    <Link href="/" className="flex flex-col items-start gap-[3px] group">
-      <div className={`w-full h-px ${lineColor} transition-opacity group-hover:opacity-60`} />
-      <span className={`${textColor} font-serif font-light text-lg tracking-[0.3em] uppercase leading-none select-none`}>
-        GreekFit
-      </span>
-      <div className={`w-full h-px ${lineColor} transition-opacity group-hover:opacity-60`} />
-    </Link>
-  );
-}
-
 export default function Header() {
   const { itemCount, openCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
@@ -53,9 +39,6 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-center justify-between h-18 py-5">
-
-            {/* Logo */}
-            <Logo dark={isOverHero} />
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-10">
