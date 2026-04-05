@@ -2,16 +2,9 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useCart } from '@/context/CartContext';
 import { Product } from '@/data/products';
-
-const tagLabel: Record<string, string> = {
-  'Novo': 'Novo',
-  'Mais Vendido': 'Mais Vendido',
-  'Limitado': 'Limitado',
-  'Outlet': 'Outlet',
-};
 
 const tagStyle: Record<string, string> = {
   'Novo': 'text-[#A88F6A]',
@@ -21,7 +14,6 @@ const tagStyle: Record<string, string> = {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addItem } = useCart();
   const [activeColor, setActiveColor] = useState(0);
   const [hovered, setHovered] = useState(false);
 
@@ -40,37 +32,42 @@ export default function ProductCard({ product }: { product: Product }) {
     >
       {/* Image */}
       <Link href={`/produto/${product.id}`} className="block relative overflow-hidden aspect-[3/4]">
-        <motion.img
-          src={img}
-          alt={product.name}
-          className="w-full h-full object-cover transition-all duration-700"
+        <motion.div
+          className="absolute inset-0"
           animate={{ scale: hovered ? 1.04 : 1 }}
           transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-          style={{ filter: 'saturate(0.88) brightness(0.97)' }}
-        />
+        >
+          <Image
+            src={img}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover"
+            style={{ filter: 'saturate(0.88) brightness(0.97)' }}
+          />
+        </motion.div>
 
         {/* Tag */}
         {product.tag && (
-          <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase font-medium ${tagStyle[product.tag] || 'text-[#6F6A5F]'}`}>
-            {tagLabel[product.tag]}
+          <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase font-medium z-10 ${tagStyle[product.tag] || 'text-[#6F6A5F]'}`}>
+            {product.tag}
           </span>
         )}
 
         {/* Low stock */}
         {product.stock <= 3 && (
-          <span className="absolute top-3 right-3 text-[9px] tracking-[0.15em] uppercase text-[#A88F6A]">
+          <span className="absolute top-3 right-3 text-[9px] tracking-[0.15em] uppercase text-[#A88F6A] z-10">
             Últimas {product.stock}
           </span>
         )}
 
-        {/* Quick add — fade in on hover */}
-        <div className={`absolute bottom-0 left-0 right-0 transition-all duration-400 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-          <button
-            onClick={e => { e.preventDefault(); addItem(product, 'M'); }}
-            className="w-full bg-[#F5F1E8]/90 hover:bg-[#F5F1E8] text-[#1A1A1A] py-3 text-[9px] tracking-[0.3em] uppercase font-medium transition-colors backdrop-blur-sm"
+        {/* Quick view — fade in on hover */}
+        <div className={`absolute bottom-0 left-0 right-0 z-10 transition-all duration-400 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+          <span
+            className="block w-full bg-[#F5F1E8]/90 text-[#1A1A1A] py-3 text-[9px] tracking-[0.3em] uppercase font-medium text-center backdrop-blur-sm"
           >
-            Adicionar à Sacola
-          </button>
+            Ver Detalhes
+          </span>
         </div>
       </Link>
 
@@ -83,6 +80,7 @@ export default function ProductCard({ product }: { product: Product }) {
               <button
                 key={i}
                 title={c.name}
+                aria-label={`Cor: ${c.name}`}
                 onClick={() => setActiveColor(i)}
                 className={`w-3 h-3 rounded-full border transition-all duration-200 ${
                   activeColor === i

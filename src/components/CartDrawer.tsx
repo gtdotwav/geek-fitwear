@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 
 const FREE_SHIPPING = 299.9;
@@ -82,11 +83,13 @@ export default function CartDrawer() {
                       exit={{ opacity: 0, x: -40 }}
                       className="flex gap-5"
                     >
-                      <div className="w-20 h-24 flex-shrink-0 overflow-hidden bg-[#E6DFD2]">
-                        <img
+                      <div className="w-20 h-24 flex-shrink-0 overflow-hidden bg-[#E6DFD2] relative">
+                        <Image
                           src={item.product.colors[0].image}
                           alt={item.product.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="80px"
+                          className="object-cover"
                           style={{ filter: 'saturate(0.85)' }}
                         />
                       </div>
@@ -136,7 +139,13 @@ export default function CartDrawer() {
                   ou {items[0]?.product.installments.count}x · Compra segura · Devoluções grátis
                 </p>
                 <button
-                  onClick={() => console.log('Integração do Gateway aqui')}
+                  onClick={() => {
+                    const msg = items.map(i =>
+                      `• ${i.product.name} — Tam. ${i.size}${i.variant === 'com-logo' ? ' (Com Logo)' : i.variant === 'sem-logo' ? ' (Sem Logo)' : ''} — ${i.quantity}x R$ ${i.product.pixPrice.toFixed(2).replace('.', ',')}`
+                    ).join('\n');
+                    const text = encodeURIComponent(`Olá! Gostaria de finalizar meu pedido:\n\n${msg}\n\nTotal Pix: R$ ${total.toFixed(2).replace('.', ',')}`);
+                    window.open(`https://wa.me/5511999999999?text=${text}`, '_blank');
+                  }}
                   className="w-full bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8] py-4 text-[9px] tracking-[0.35em] uppercase font-medium transition-colors"
                 >
                   Finalizar Pedido

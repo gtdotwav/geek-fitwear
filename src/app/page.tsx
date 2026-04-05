@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
 import ProductGrid from '@/components/ProductGrid';
@@ -61,10 +62,12 @@ export default function HomePage() {
             {/* Large left — GREEK WEEK group */}
             <Reveal className="col-span-12 md:col-span-7" delay={0}>
               <Link href="#collection" className="group block relative overflow-hidden aspect-[4/5] md:aspect-[3/4]">
-                <img
+                <Image
                   src="/banners/6.png"
                   alt="Greek Week Collection"
-                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 58vw"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-7 left-7">
@@ -78,10 +81,12 @@ export default function HomePage() {
             <div className="col-span-12 md:col-span-5 flex flex-col gap-4 md:gap-6">
               <Reveal delay={0.1}>
                 <Link href="#collection" className="group block relative overflow-hidden aspect-[4/3]">
-                  <img
+                  <Image
                     src="/banners/11.png"
                     alt="Greek Lifestyle"
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 42vw"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
                   />
                   <div className="absolute bottom-5 left-5">
                     <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Lifestyle</p>
@@ -92,10 +97,12 @@ export default function HomePage() {
 
               <Reveal delay={0.18}>
                 <Link href="/produto/dynamis" className="group block relative overflow-hidden aspect-[4/3]">
-                  <img
+                  <Image
                     src="/banners/14.png"
                     alt="ΔΥΝΑΜΙΣ Collection"
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 42vw"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
                   />
                   <div className="absolute bottom-5 left-5">
                     <p className="text-[#F5F1E8] text-[9px] tracking-[0.35em] uppercase mb-0.5 opacity-80">Nova Coleção</p>
@@ -113,11 +120,13 @@ export default function HomePage() {
         <Reveal>
           <Link href="#collection" className="group block relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
-              <div className="relative overflow-hidden rounded-sm">
-                <img
+              <div className="relative overflow-hidden rounded-sm aspect-[16/5]">
+                <Image
                   src="/banners/3.png"
                   alt="Greek Week — Not just a fitwear"
-                  className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-1000"
+                  fill
+                  sizes="100vw"
+                  className="object-cover group-hover:scale-[1.02] transition-transform duration-1000"
                 />
               </div>
             </div>
@@ -133,10 +142,12 @@ export default function HomePage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden bg-[#1A1A1A]">
                 {/* Image */}
                 <div className="aspect-[3/4] lg:aspect-auto lg:min-h-[600px] overflow-hidden relative">
-                  <img
-                    src="/products/dynamis/1.png"
+                  <Image
+                    src="/products/dynamis/set-shorts-arms.png"
                     alt="ΔΥΝΑΜΙΣ Collection"
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-1000"
                   />
                 </div>
                 {/* Text */}
@@ -174,11 +185,13 @@ export default function HomePage() {
         <Reveal>
           <Link href="#collection" className="group block">
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
-              <div className="relative overflow-hidden rounded-sm">
-                <img
+              <div className="relative overflow-hidden rounded-sm aspect-[16/5]">
+                <Image
                   src="/banners/4.png"
                   alt="Greek Week — Up to 30% off"
-                  className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-1000"
+                  fill
+                  sizes="100vw"
+                  className="object-cover group-hover:scale-[1.02] transition-transform duration-1000"
                 />
               </div>
             </div>
@@ -194,10 +207,12 @@ export default function HomePage() {
             {/* Image */}
             <Reveal className="aspect-[4/5] lg:aspect-auto lg:min-h-[640px]">
               <div className="relative w-full h-full overflow-hidden">
-                <img
+                <Image
                   src="/banners/7.png"
                   alt="Greek at Rio Campaign"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                 />
               </div>
             </Reveal>
@@ -231,11 +246,13 @@ export default function HomePage() {
       {/* ─── Rio Beach Full-width Banner ──────────────────────────── */}
       <section>
         <Reveal>
-          <div className="relative overflow-hidden">
-            <img
+          <div className="relative overflow-hidden aspect-[16/7]">
+            <Image
               src="/banners/8.png"
               alt="Not just a fitwear — Rio de Janeiro"
-              className="w-full h-auto object-cover"
+              fill
+              sizes="100vw"
+              className="object-cover"
             />
           </div>
         </Reveal>
@@ -253,19 +270,23 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <Reveal delay={0}>
               <div className="relative overflow-hidden aspect-[16/10]">
-                <img
+                <Image
                   src="/banners/9.png"
                   alt="Greek at Rio — Beach workout"
-                  className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-1000"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover hover:scale-[1.03] transition-transform duration-1000"
                 />
               </div>
             </Reveal>
             <Reveal delay={0.1}>
               <div className="relative overflow-hidden aspect-[16/10]">
-                <img
+                <Image
                   src="/banners/12.png"
                   alt="Greek — Yoga retreat"
-                  className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-1000"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover hover:scale-[1.03] transition-transform duration-1000"
                 />
               </div>
             </Reveal>
@@ -333,7 +354,7 @@ export default function HomePage() {
           {/* Bottom */}
           <div className="border-t border-[#E6DFD2] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-[#6F6A5F] text-[9px] tracking-[0.2em] font-light">
-              © 2025 GreekFit. Todos os direitos reservados.
+              © {new Date().getFullYear()} GreekFit. Todos os direitos reservados.
             </p>
             <div className="flex items-center gap-6">
               {['Instagram', 'TikTok', 'Pinterest'].map(s => (

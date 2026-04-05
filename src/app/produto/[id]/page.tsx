@@ -3,6 +3,7 @@
 import { use, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Truck, Shield, Star, ArrowLeft, Check } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -96,17 +97,24 @@ export default function ProductPage({ params }: Props) {
 
           {/* ── Images ── */}
           <div className="space-y-3">
-            <div className="aspect-[3/4] overflow-hidden bg-[#E6DFD2]">
+            <div className="aspect-[3/4] overflow-hidden bg-[#E6DFD2] relative">
               <AnimatePresence mode="wait">
-                <motion.img
+                <motion.div
                   key={`${activeColor}-${activeImage}`}
-                  src={images[activeImage]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0"
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  style={{ filter: 'saturate(0.85) brightness(0.97) sepia(0.04)' }}
-                />
+                >
+                  <Image
+                    src={images[activeImage]}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
+                    className="object-cover"
+                    style={{ filter: 'saturate(0.85) brightness(0.97) sepia(0.04)' }}
+                  />
+                </motion.div>
               </AnimatePresence>
             </div>
             {images.length > 1 && (
@@ -115,11 +123,11 @@ export default function ProductPage({ params }: Props) {
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`w-14 h-14 overflow-hidden transition-all ${
+                    className={`w-14 h-14 overflow-hidden transition-all relative ${
                       activeImage === i ? 'ring-1 ring-[#A88F6A] ring-offset-2 ring-offset-[#F5F1E8]' : 'opacity-40 hover:opacity-70'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" style={{ filter: 'saturate(0.85)' }} />
+                    <Image src={img} alt="" fill sizes="56px" className="object-cover" style={{ filter: 'saturate(0.85)' }} />
                   </button>
                 ))}
               </div>

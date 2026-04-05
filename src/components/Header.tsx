@@ -29,14 +29,11 @@ function Logo({ dark = false }: { dark?: boolean }) {
 export default function Header() {
   const { itemCount, openCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
-  const [heroHeight, setHeroHeight] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const hero = document.querySelector('section[data-hero]') as HTMLElement;
-    if (hero) setHeroHeight(hero.offsetHeight);
     const handleScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -108,6 +105,8 @@ export default function Header() {
                   isOverHero ? 'text-[#F5F1E8]/70' : 'text-[#6F6A5F]'
                 }`}
                 onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+                aria-expanded={mobileOpen}
               >
                 {mobileOpen
                   ? <X className="w-[18px] h-[18px]" strokeWidth={1.3} />

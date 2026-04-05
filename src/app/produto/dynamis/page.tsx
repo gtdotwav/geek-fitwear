@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Truck, Shield, Star, ArrowLeft, Check } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import type { Product } from '@/data/products';
@@ -246,18 +247,25 @@ export default function DynamisPage() {
 
           {/* ── Images ── */}
           <div className="space-y-3">
-            <div className="aspect-[3/4] overflow-hidden bg-[#E6DFD2]">
+            <div className="aspect-[3/4] overflow-hidden bg-[#E6DFD2] relative">
               <AnimatePresence mode="wait">
-                <motion.img
+                <motion.div
                   key={`${activePiece}-${activeImage}`}
-                  src={images[activeImage]}
-                  alt={`ΔΥΝΑΜΙΣ ${piece.label}`}
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                />
+                >
+                  <Image
+                    src={images[activeImage]}
+                    alt={`ΔΥΝΑΜΙΣ ${piece.label}`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
+                    className="object-cover"
+                  />
+                </motion.div>
               </AnimatePresence>
             </div>
             {images.length > 1 && (
@@ -266,13 +274,13 @@ export default function DynamisPage() {
                   <button
                     key={`${activePiece}-thumb-${i}`}
                     onClick={() => setActiveImage(i)}
-                    className={`w-16 h-20 flex-shrink-0 overflow-hidden transition-all ${
+                    className={`w-16 h-20 flex-shrink-0 overflow-hidden transition-all relative ${
                       activeImage === i
                         ? 'ring-1 ring-[#A88F6A] ring-offset-2 ring-offset-[#F5F1E8]'
                         : 'opacity-40 hover:opacity-70'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <Image src={img} alt="" fill sizes="64px" className="object-cover" />
                   </button>
                 ))}
               </div>
@@ -514,7 +522,7 @@ export default function DynamisPage() {
             ].map((src, i) => (
               <motion.div
                 key={i}
-                className={`overflow-hidden cursor-pointer ${
+                className={`overflow-hidden cursor-pointer relative aspect-[3/4] ${
                   i === 0 || i === 4 ? 'md:col-span-2 md:row-span-2' : ''
                 }`}
                 whileHover={{ scale: 0.98 }}
@@ -529,10 +537,12 @@ export default function DynamisPage() {
                   }
                 }}
               >
-                <img
+                <Image
                   src={src}
                   alt={`ΔΥΝΑΜΙΣ detalhe ${i + 1}`}
-                  className="w-full h-full object-cover aspect-[3/4]"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover"
                 />
               </motion.div>
             ))}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const slides = [
   {
@@ -44,7 +45,7 @@ export default function HeroSlider() {
   return (
     <section
       data-hero
-      className="relative w-full h-[60vh] md:h-[80vh] lg:h-screen overflow-hidden bg-[#2B2B2B]"
+      className="relative w-full h-[75vh] md:h-[85vh] lg:h-screen overflow-hidden bg-[#2B2B2B]"
     >
       {/* Images — crossfade */}
       <AnimatePresence mode="sync">
@@ -56,25 +57,31 @@ export default function HeroSlider() {
           exit={{ opacity: 0 }}
           transition={{ duration: 1.4, ease: 'easeInOut' }}
         >
-          <img
+          <Image
             src={slides[current].image}
-            alt="Greek Fitwear Campaign"
-            className="w-full h-full object-contain md:object-cover"
+            alt={`GreekFit Campaign — Slide ${current + 1}`}
+            fill
+            sizes="100vw"
+            priority={current === 0}
+            className="object-cover"
           />
         </motion.div>
       </AnimatePresence>
 
       {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20 pointer-events-none" />
 
       {/* Bottom: scroll cue + dots */}
       <div className="absolute bottom-8 left-0 right-0 flex items-center justify-between px-8 lg:px-12">
         {/* Slide dots */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" role="tablist" aria-label="Slides do banner">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
+              aria-label={`Slide ${i + 1}`}
+              aria-selected={i === current}
+              role="tab"
               className={`transition-all duration-500 rounded-full ${
                 i === current
                   ? 'w-5 h-[3px] bg-[#C2A27C]'
