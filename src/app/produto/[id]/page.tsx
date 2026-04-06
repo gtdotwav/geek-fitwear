@@ -27,8 +27,6 @@ export default function ProductPage({ params }: Props) {
   const [sizeError, setSizeError] = useState(false);
   const [logoVariant, setLogoVariant] = useState<'com-logo' | 'sem-logo'>('com-logo');
 
-  const isLegging = product.category === 'Legging' || (product.category === 'Set' && product.name.includes('Completo'));
-
   const color = product.colors[activeColor];
   const images = [color.image, ...(color.backImage ? [color.backImage] : [])];
   const discount = Math.round(((product.originalPrice - product.pixPrice) / product.originalPrice) * 100);
@@ -44,8 +42,7 @@ export default function ProductPage({ params }: Props) {
 
   const handleAdd = () => {
     if (!selectedSize) { setSizeError(true); setTimeout(() => setSizeError(false), 2000); return; }
-    const variant = isLegging ? logoVariant : undefined;
-    addItem(product, selectedSize, variant);
+    addItem(product, selectedSize, logoVariant);
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
   };
@@ -237,39 +234,37 @@ export default function ProductPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Logo variant — leggings only */}
-            {isLegging && (
-              <div>
-                <p className="text-[#6F6A5F] text-[9px] tracking-[0.3em] uppercase mb-4 font-medium">
-                  Detalhe
-                </p>
-                <div className="flex gap-2">
-                  {([
-                    { key: 'com-logo' as const, label: 'Com Logo', sub: 'Logo em relevo no cós' },
-                    { key: 'sem-logo' as const, label: 'Sem Logo', sub: 'Versão clean' },
-                  ]).map(v => (
-                    <button
-                      key={v.key}
-                      onClick={() => setLogoVariant(v.key)}
-                      className={`flex-1 py-3.5 text-center border transition-all duration-300 ${
-                        logoVariant === v.key
-                          ? 'border-[#1A1A1A] bg-[#1A1A1A] text-[#F5F1E8]'
-                          : 'border-[#E6DFD2] text-[#6F6A5F] hover:border-[#A88F6A]/50 hover:text-[#1A1A1A]'
-                      }`}
-                    >
-                      <span className="block text-[9px] tracking-[0.3em] uppercase font-medium">
-                        {v.label}
-                      </span>
-                      <span className={`block text-[8px] mt-0.5 font-light tracking-wider ${
-                        logoVariant === v.key ? 'text-[#A88F6A]' : 'text-[#6F6A5F]'
-                      }`}>
-                        {v.sub}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+            {/* Logo variant */}
+            <div>
+              <p className="text-[#6F6A5F] text-[9px] tracking-[0.3em] uppercase mb-4 font-medium">
+                Detalhe
+              </p>
+              <div className="flex gap-2">
+                {([
+                  { key: 'com-logo' as const, label: 'Com Logo', sub: 'Logo em relevo no cós' },
+                  { key: 'sem-logo' as const, label: 'Sem Logo', sub: 'Versão clean' },
+                ]).map(v => (
+                  <button
+                    key={v.key}
+                    onClick={() => setLogoVariant(v.key)}
+                    className={`flex-1 py-3.5 text-center border transition-all duration-300 ${
+                      logoVariant === v.key
+                        ? 'border-[#1A1A1A] bg-[#1A1A1A] text-[#F5F1E8]'
+                        : 'border-[#E6DFD2] text-[#6F6A5F] hover:border-[#A88F6A]/50 hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    <span className="block text-[9px] tracking-[0.3em] uppercase font-medium">
+                      {v.label}
+                    </span>
+                    <span className={`block text-[8px] mt-0.5 font-light tracking-wider ${
+                      logoVariant === v.key ? 'text-[#A88F6A]' : 'text-[#6F6A5F]'
+                    }`}>
+                      {v.sub}
+                    </span>
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             {/* CTA */}
             <button
