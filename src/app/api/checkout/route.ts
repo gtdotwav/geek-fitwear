@@ -44,18 +44,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate total in CENTAVOS (API requires centavos)
-    const totalCentavos = Math.round(
+    // Calculate total in REAIS (API uses reais directly)
+    const totalReais = Math.round(
       items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100
-    );
-    const totalReais = totalCentavos / 100;
+    ) / 100;
 
     // Build description
     const description = items
       .map(i => `${i.quantity}x ${i.name} (${i.size}${i.variant ? ` - ${i.variant}` : ''})`)
       .join(', ');
 
-    // 1. Create checkout session (amount in centavos, PIX only → auto-generates PIX)
+    // 1. Create checkout session (amount in reais)
     const sessionRes = await fetch(`${API_BASE}/sessions`, {
       method: 'POST',
       headers: {
@@ -63,7 +62,7 @@ export async function POST(request: Request) {
         'X-API-Key': SECRET_KEY,
       },
       body: JSON.stringify({
-        amount: totalCentavos,
+        amount: totalReais,
         description: `GreekFit — ${description}`,
         customerName: customer.name,
         customerEmail: customer.email,
@@ -109,9 +108,8 @@ export async function POST(request: Request) {
     }
 
     const session = await sessionRes.json();
-    console.log('Session created:', JSON.stringify({ sessionId: session.sessionId, shortId: session.shortId, keys: Object.keys(session) }));
 
-    // 2. Fetch session details — PIX-only sessions auto-generate pixCode/pixQrCode
+    // 2. Fetch session details to check for auto-generated PIX
     let pixCode = '';
     let pixQrCode = '';
 
@@ -122,20 +120,18 @@ export async function POST(request: Request) {
 
       if (detailsRes.ok) {
         const details = await detailsRes.json();
-        // Response wraps in { session: { ... } }
         const s = details.session || details;
         pixCode = s.pixCode || '';
         pixQrCode = s.pixQrCode || '';
-        console.log('Session details fetched. Has pixCode:', !!pixCode, 'Has pixQrCode:', !!pixQrCode, 'Status:', s.status, 'Keys:', Object.keys(s).join(','));
 
-        // If PIX not yet in details, try /pay endpoint with any available provider
-        if (!pixCode && s.providers?.length) {
-          const pixProvider = s.providers.find(
+        // If no PIX yet and providers available, try /pay
+        if (!pixCode) {
+          const providers = s.providers || [];
+          const pixProvider = providers.find(
             (p: { methodType?: string; type?: string; enabled?: boolean }) =>
               (p.methodType === 'pix' || p.type === 'pix') && p.enabled !== false
           );
           if (pixProvider?.id) {
-            console.log('Trying /pay with providerId:', pixProvider.id);
             const payRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}/pay`, {
               method: 'POST',
               headers: {
@@ -152,22 +148,22 @@ export async function POST(request: Request) {
               const payData = await payRes.json();
               pixCode = payData.pixCode || '';
               pixQrCode = payData.pixQrCode || '';
-              console.log('PIX generated via /pay. Has pixCode:', !!pixCode);
-            } else {
-              console.error('Pay error:', await payRes.text().catch(() => 'N/A'));
             }
           }
         }
-      } else {
-        console.error('Session details error:', detailsRes.status, await detailsRes.text().catch(() => 'N/A'));
       }
     } catch (e) {
       console.error('PIX fetch error:', e);
     }
 
+    // Append ?method=pix to checkoutUrl for direct PIX selection
+    const checkoutUrl = session.checkoutUrl
+      ? `${session.checkoutUrl}${session.checkoutUrl.includes('?') ? '&' : '?'}method=pix`
+      : '';
+
     return NextResponse.json({
       sessionId: session.sessionId,
-      checkoutUrl: session.checkoutUrl,
+      checkoutUrl,
       pixCode,
       pixQrCode,
       amount: totalReais,
