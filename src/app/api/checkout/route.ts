@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const API_BASE = 'https://pagrecovery.com/checkout/api/v1';
-const SECRET_KEY = process.env.PAGRECOVERY_SECRET_KEY!;
+const SECRET_KEY = (process.env.PAGRECOVERY_SECRET_KEY || '').trim();
 
 interface CheckoutItem {
   name: string;
@@ -32,6 +32,41 @@ interface CheckoutBody {
   address?: CheckoutAddress;
 }
 
+// Cache merchant config (provider ID doesn't change)
+let cachedPixProviderId: string | null = null;
+
+async function getPixProviderId(): Promise<string> {
+  if (cachedPixProviderId) return cachedPixProviderId;
+
+  try {
+    const res = await fetch(`${API_BASE}/merchants/config`, {
+      headers: { 'X-API-Key': SECRET_KEY },
+    });
+    if (res.ok) {
+      const config = await res.json();
+      // Look for PIX provider in merchant config
+      const providers = config.providers || config.paymentProviders || [];
+      const pixProvider = providers.find(
+        (p: { methodType?: string; type?: string; enabled?: boolean }) =>
+          (p.methodType === 'pix' || p.type === 'pix') && p.enabled !== false
+      );
+      if (pixProvider?.id) {
+        cachedPixProviderId = pixProvider.id;
+        return pixProvider.id;
+      }
+      // If config has a flat structure, try other patterns
+      if (config.pixProviderId) {
+        cachedPixProviderId = config.pixProviderId;
+        return config.pixProviderId;
+      }
+    }
+    console.error('Merchant config response:', await res.text().catch(() => 'N/A'));
+  } catch (e) {
+    console.error('Failed to fetch merchant config:', e);
+  }
+  return '';
+}
+
 export async function POST(request: Request) {
   try {
     const body: CheckoutBody = await request.json();
@@ -44,17 +79,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate total (round to 2 decimals)
-    const totalReais = Math.round(
+    // Calculate total in CENTAVOS (API requires centavos)
+    const totalCentavos = Math.round(
       items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100
-    ) / 100;
+    );
+    const totalReais = totalCentavos / 100;
 
     // Build description
     const description = items
       .map(i => `${i.quantity}x ${i.name} (${i.size}${i.variant ? ` - ${i.variant}` : ''})`)
       .join(', ');
 
-    // 1. Create checkout session
+    // 1. Create checkout session (amount in centavos)
     const sessionRes = await fetch(`${API_BASE}/sessions`, {
       method: 'POST',
       headers: {
@@ -62,7 +98,7 @@ export async function POST(request: Request) {
         'X-API-Key': SECRET_KEY,
       },
       body: JSON.stringify({
-        amount: totalReais,
+        amount: totalCentavos,
         description: `GreekFit — ${description}`,
         customerName: customer.name,
         customerEmail: customer.email,
@@ -100,7 +136,7 @@ export async function POST(request: Request) {
 
     if (!sessionRes.ok) {
       const err = await sessionRes.json().catch(() => ({}));
-      console.error('PagRecovery session error:', err);
+      console.error('PagRecovery session error:', JSON.stringify(err));
       return NextResponse.json(
         { error: 'Erro ao criar sessão de pagamento.' },
         { status: sessionRes.status }
@@ -108,39 +144,29 @@ export async function POST(request: Request) {
     }
 
     const session = await sessionRes.json();
+    const sessionId = session.shortId || session.sessionId;
 
-    // 2. Get session details to find the PIX provider ID
+    // 2. Get PIX provider ID from merchant config
     let pixCode = '';
     let pixQrCode = '';
 
     try {
-      // Fetch session to get available providers
-      const detailsRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}`, {
-        headers: { 'X-API-Key': SECRET_KEY },
-      });
-
-      let providerId = '';
-      if (detailsRes.ok) {
-        const details = await detailsRes.json();
-        const pixProvider = (details.providers || []).find(
-          (p: { methodType: string; enabled: boolean }) => p.methodType === 'pix' && p.enabled
-        );
-        providerId = pixProvider?.id || '';
-      }
+      const providerId = await getPixProviderId();
 
       if (!providerId) {
-        console.error('No PIX provider found for this merchant');
+        console.error('No PIX provider found in merchant config. Falling back to hosted checkout.');
       } else {
-        // 3. Process PIX payment using shortId and providerId
-        const payRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}/pay`, {
+        // 3. Process PIX payment
+        const payRes = await fetch(`${API_BASE}/sessions/${sessionId}/pay`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-API-Key': SECRET_KEY,
           },
           body: JSON.stringify({
-            methodType: 'pix',
             providerId,
+            methodType: 'pix',
+            installments: 1,
           }),
         });
 
@@ -148,9 +174,10 @@ export async function POST(request: Request) {
           const payData = await payRes.json();
           pixCode = payData.pixCode || '';
           pixQrCode = payData.pixQrCode || '';
+          console.log('PIX generated successfully for session:', sessionId);
         } else {
           const payErr = await payRes.json().catch(() => ({}));
-          console.error('PagRecovery pay error:', payErr);
+          console.error('PagRecovery pay error:', JSON.stringify(payErr));
         }
       }
     } catch (payError) {
