@@ -44,17 +44,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate total in REAIS (API uses reais directly)
+    // Calculate total in REAIS
     const totalReais = Math.round(
       items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100
     ) / 100;
 
-    // Build description
     const description = items
       .map(i => `${i.quantity}x ${i.name} (${i.size}${i.variant ? ` - ${i.variant}` : ''})`)
       .join(', ');
 
-    // 1. Create checkout session (amount in reais)
+    // 1. Create checkout session
     const sessionRes = await fetch(`${API_BASE}/sessions`, {
       method: 'POST',
       headers: {
@@ -100,7 +99,7 @@ export async function POST(request: Request) {
 
     if (!sessionRes.ok) {
       const err = await sessionRes.json().catch(() => ({}));
-      console.error('PagRecovery session error:', JSON.stringify(err));
+      console.error('[checkout] session create error:', JSON.stringify(err));
       return NextResponse.json(
         { error: 'Erro ao criar sessão de pagamento.' },
         { status: sessionRes.status }
@@ -108,31 +107,39 @@ export async function POST(request: Request) {
     }
 
     const session = await sessionRes.json();
+    const sid = session.shortId || session.sessionId;
+    console.error('[checkout] session created:', JSON.stringify({ sessionId: session.sessionId, shortId: session.shortId, keys: Object.keys(session) }));
 
-    // 2. Fetch session details to check for auto-generated PIX
+    // 2. Fetch session details
     let pixCode = '';
     let pixQrCode = '';
 
     try {
-      const detailsRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}`, {
+      const detailsRes = await fetch(`${API_BASE}/sessions/${sid}`, {
         headers: { 'X-API-Key': SECRET_KEY },
       });
 
       if (detailsRes.ok) {
-        const details = await detailsRes.json();
-        const s = details.session || details;
+        const raw = await detailsRes.json();
+        const s = raw.session || raw;
+        console.error('[checkout] session details keys:', Object.keys(s).join(', '), '| status:', s.status, '| hasPixCode:', !!s.pixCode, '| hasProviders:', !!(s.providers?.length));
+
         pixCode = s.pixCode || '';
         pixQrCode = s.pixQrCode || '';
 
-        // If no PIX yet and providers available, try /pay
+        // 3. If no PIX yet, try /pay with any available provider
         if (!pixCode) {
           const providers = s.providers || [];
+          console.error('[checkout] providers found:', providers.length, providers.map((p: { id: string; methodType: string }) => `${p.id}:${p.methodType}`).join(', '));
+
           const pixProvider = providers.find(
             (p: { methodType?: string; type?: string; enabled?: boolean }) =>
               (p.methodType === 'pix' || p.type === 'pix') && p.enabled !== false
           );
+
           if (pixProvider?.id) {
-            const payRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}/pay`, {
+            console.error('[checkout] calling /pay with provider:', pixProvider.id);
+            const payRes = await fetch(`${API_BASE}/sessions/${sid}/pay`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -144,19 +151,30 @@ export async function POST(request: Request) {
                 installments: 1,
               }),
             });
+
+            const payText = await payRes.text();
+            console.error('[checkout] /pay response:', payRes.status, payText.substring(0, 500));
+
             if (payRes.ok) {
-              const payData = await payRes.json();
-              pixCode = payData.pixCode || '';
-              pixQrCode = payData.pixQrCode || '';
+              try {
+                const payData = JSON.parse(payText);
+                pixCode = payData.pixCode || '';
+                pixQrCode = payData.pixQrCode || '';
+              } catch { /* ignore */ }
             }
+          } else {
+            console.error('[checkout] no PIX provider found in session details');
           }
         }
+      } else {
+        console.error('[checkout] session details error:', detailsRes.status, await detailsRes.text().catch(() => 'N/A'));
       }
     } catch (e) {
-      console.error('PIX fetch error:', e);
+      console.error('[checkout] PIX fetch error:', e);
     }
 
-    // Append ?method=pix to checkoutUrl for direct PIX selection
+    console.error('[checkout] final result: hasPixCode:', !!pixCode, 'hasQrCode:', !!pixQrCode);
+
     const checkoutUrl = session.checkoutUrl
       ? `${session.checkoutUrl}${session.checkoutUrl.includes('?') ? '&' : '?'}method=pix`
       : '';
@@ -169,7 +187,7 @@ export async function POST(request: Request) {
       amount: totalReais,
     });
   } catch (error) {
-    console.error('Checkout error:', error);
+    console.error('[checkout] error:', error);
     return NextResponse.json(
       { error: 'Erro interno ao processar pagamento.' },
       { status: 500 }
