@@ -32,41 +32,6 @@ interface CheckoutBody {
   address?: CheckoutAddress;
 }
 
-// Cache merchant config (provider ID doesn't change)
-let cachedPixProviderId: string | null = null;
-
-async function getPixProviderId(): Promise<string> {
-  if (cachedPixProviderId) return cachedPixProviderId;
-
-  try {
-    const res = await fetch(`${API_BASE}/merchants/config`, {
-      headers: { 'X-API-Key': SECRET_KEY },
-    });
-    if (res.ok) {
-      const config = await res.json();
-      // Look for PIX provider in merchant config
-      const providers = config.providers || config.paymentProviders || [];
-      const pixProvider = providers.find(
-        (p: { methodType?: string; type?: string; enabled?: boolean }) =>
-          (p.methodType === 'pix' || p.type === 'pix') && p.enabled !== false
-      );
-      if (pixProvider?.id) {
-        cachedPixProviderId = pixProvider.id;
-        return pixProvider.id;
-      }
-      // If config has a flat structure, try other patterns
-      if (config.pixProviderId) {
-        cachedPixProviderId = config.pixProviderId;
-        return config.pixProviderId;
-      }
-    }
-    console.error('Merchant config response:', await res.text().catch(() => 'N/A'));
-  } catch (e) {
-    console.error('Failed to fetch merchant config:', e);
-  }
-  return '';
-}
-
 export async function POST(request: Request) {
   try {
     const body: CheckoutBody = await request.json();
@@ -90,7 +55,7 @@ export async function POST(request: Request) {
       .map(i => `${i.quantity}x ${i.name} (${i.size}${i.variant ? ` - ${i.variant}` : ''})`)
       .join(', ');
 
-    // 1. Create checkout session (amount in centavos)
+    // 1. Create checkout session (amount in centavos, PIX only → auto-generates PIX)
     const sessionRes = await fetch(`${API_BASE}/sessions`, {
       method: 'POST',
       headers: {
@@ -144,44 +109,60 @@ export async function POST(request: Request) {
     }
 
     const session = await sessionRes.json();
-    const sessionId = session.shortId || session.sessionId;
+    console.log('Session created:', JSON.stringify({ sessionId: session.sessionId, shortId: session.shortId, keys: Object.keys(session) }));
 
-    // 2. Get PIX provider ID from merchant config
+    // 2. Fetch session details — PIX-only sessions auto-generate pixCode/pixQrCode
     let pixCode = '';
     let pixQrCode = '';
 
     try {
-      const providerId = await getPixProviderId();
+      const detailsRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}`, {
+        headers: { 'X-API-Key': SECRET_KEY },
+      });
 
-      if (!providerId) {
-        console.error('No PIX provider found in merchant config. Falling back to hosted checkout.');
-      } else {
-        // 3. Process PIX payment
-        const payRes = await fetch(`${API_BASE}/sessions/${sessionId}/pay`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': SECRET_KEY,
-          },
-          body: JSON.stringify({
-            providerId,
-            methodType: 'pix',
-            installments: 1,
-          }),
-        });
+      if (detailsRes.ok) {
+        const details = await detailsRes.json();
+        // Response wraps in { session: { ... } }
+        const s = details.session || details;
+        pixCode = s.pixCode || '';
+        pixQrCode = s.pixQrCode || '';
+        console.log('Session details fetched. Has pixCode:', !!pixCode, 'Has pixQrCode:', !!pixQrCode, 'Status:', s.status, 'Keys:', Object.keys(s).join(','));
 
-        if (payRes.ok) {
-          const payData = await payRes.json();
-          pixCode = payData.pixCode || '';
-          pixQrCode = payData.pixQrCode || '';
-          console.log('PIX generated successfully for session:', sessionId);
-        } else {
-          const payErr = await payRes.json().catch(() => ({}));
-          console.error('PagRecovery pay error:', JSON.stringify(payErr));
+        // If PIX not yet in details, try /pay endpoint with any available provider
+        if (!pixCode && s.providers?.length) {
+          const pixProvider = s.providers.find(
+            (p: { methodType?: string; type?: string; enabled?: boolean }) =>
+              (p.methodType === 'pix' || p.type === 'pix') && p.enabled !== false
+          );
+          if (pixProvider?.id) {
+            console.log('Trying /pay with providerId:', pixProvider.id);
+            const payRes = await fetch(`${API_BASE}/sessions/${session.shortId || session.sessionId}/pay`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': SECRET_KEY,
+              },
+              body: JSON.stringify({
+                providerId: pixProvider.id,
+                methodType: 'pix',
+                installments: 1,
+              }),
+            });
+            if (payRes.ok) {
+              const payData = await payRes.json();
+              pixCode = payData.pixCode || '';
+              pixQrCode = payData.pixQrCode || '';
+              console.log('PIX generated via /pay. Has pixCode:', !!pixCode);
+            } else {
+              console.error('Pay error:', await payRes.text().catch(() => 'N/A'));
+            }
+          }
         }
+      } else {
+        console.error('Session details error:', detailsRes.status, await detailsRes.text().catch(() => 'N/A'));
       }
-    } catch (payError) {
-      console.error('PIX generation error:', payError);
+    } catch (e) {
+      console.error('PIX fetch error:', e);
     }
 
     return NextResponse.json({
