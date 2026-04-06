@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag, Minus, Plus, Trash2, Sparkles, Loader2, MapPin, ChevronRight } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Sparkles, Loader2, MapPin, ChevronRight, Copy, Check, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import { useCart, CartItem } from '@/context/CartContext';
 import { products, Product } from '@/data/products';
@@ -328,14 +328,23 @@ export default function CartDrawer() {
 
 /* ─── Cart Footer with Checkout ─── */
 
+interface PixResult {
+  pixCode: string;
+  pixQrCode: string;
+  checkoutUrl: string;
+  amount: number;
+}
+
 function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
-  const [step, setStep] = useState<'cart' | 'form' | 'address'>('cart');
+  const [step, setStep] = useState<'cart' | 'form' | 'address' | 'pix'>('cart');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [document, setDocument] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [pixResult, setPixResult] = useState<PixResult | null>(null);
+  const [pixCopied, setPixCopied] = useState(false);
 
   // Address
   const [addrCep, setAddrCep] = useState('');
@@ -428,18 +437,31 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
 
       const data = await res.json();
 
-      if (!res.ok || !data.checkoutUrl) {
+      if (!res.ok) {
         setError(data.error || 'Erro ao criar pagamento.');
         return;
       }
 
-      window.open(data.checkoutUrl, '_blank');
+      setPixResult({
+        pixCode: data.pixCode || '',
+        pixQrCode: data.pixQrCode || '',
+        checkoutUrl: data.checkoutUrl || '',
+        amount: data.amount || total,
+      });
+      setStep('pix');
     } catch {
       setError('Erro de conexão. Tente novamente.');
     } finally {
       setLoading(false);
     }
-  }, [buildBody, addrCep, addrStreet, addrNumber, addrNeighborhood, addrCity, addrState]);
+  }, [buildBody, addrCep, addrStreet, addrNumber, addrNeighborhood, addrCity, addrState, total]);
+
+  const handleCopyPix = useCallback(() => {
+    if (!pixResult?.pixCode) return;
+    navigator.clipboard.writeText(pixResult.pixCode);
+    setPixCopied(true);
+    setTimeout(() => setPixCopied(false), 3000);
+  }, [pixResult]);
 
   const inputCls = "w-full bg-transparent border-b border-[#E6DFD2] focus:border-[#A88F6A] px-0 py-2 text-[#1A1A1A] text-xs font-light placeholder-[#C2A27C]/50 focus:outline-none transition-colors";
 
@@ -550,6 +572,60 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
                 {loading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Aguarde...</> : 'Pagar com PIX'}
               </button>
             </div>
+          </motion.div>
+        )}
+
+        {step === 'pix' && pixResult && (
+          <motion.div
+            key="pix"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="space-y-4"
+          >
+            <div className="text-center">
+              <p className="text-[#A88F6A] text-[9px] tracking-[0.3em] uppercase font-medium mb-1">Pagamento PIX</p>
+              <p className="text-[#1A1A1A] font-light text-xl">
+                R$ {pixResult.amount.toFixed(2).replace('.', ',')}
+              </p>
+            </div>
+
+            {pixResult.pixQrCode ? (
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-[#6F6A5F] text-[10px] font-light">Escaneie o QR Code para pagar</p>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={pixResult.pixQrCode} alt="QR Code PIX" className="w-44 h-44 mx-auto border border-[#E6DFD2] p-2 bg-white" />
+              </div>
+            ) : (
+              <p className="text-[#6F6A5F] text-[10px] font-light text-center">Copie o código PIX abaixo para pagar</p>
+            )}
+
+            {pixResult.pixCode && (
+              <div className="space-y-2">
+                <div className="bg-[#E6DFD2]/50 p-3 rounded-sm">
+                  <p className="text-[#1A1A1A] text-[10px] font-mono break-all leading-relaxed">{pixResult.pixCode}</p>
+                </div>
+                <button
+                  onClick={handleCopyPix}
+                  className={`w-full py-3 text-[9px] tracking-[0.2em] uppercase font-medium flex items-center justify-center gap-2 transition-all ${
+                    pixCopied
+                      ? 'bg-[#A88F6A] text-[#F5F1E8]'
+                      : 'bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8]'
+                  }`}
+                >
+                  {pixCopied ? <><Check className="w-3.5 h-3.5" /> Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar código PIX</>}
+                </button>
+              </div>
+            )}
+
+            {pixResult.checkoutUrl && (
+              <button
+                onClick={() => window.open(pixResult.checkoutUrl, '_blank')}
+                className="w-full border border-[#E6DFD2] text-[#6F6A5F] py-3 text-[9px] tracking-[0.2em] uppercase font-medium hover:border-[#A88F6A] transition-colors flex items-center justify-center gap-1.5"
+              >
+                <ExternalLink className="w-3 h-3" /> Checkout externo
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
