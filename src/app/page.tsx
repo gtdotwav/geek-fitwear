@@ -176,7 +176,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Product grid ───────────────────────────────────────────── */}
-      <div className="border-t border-[#E6DFD2]">
+      <div id="collection" className="border-t border-[#E6DFD2]">
         <ProductGrid />
       </div>
 
@@ -552,17 +552,32 @@ export default function HomePage() {
             </div>
 
             {[
-              { title: 'Loja', links: ['Coleção', 'Novidades', 'Outlet', 'Gift Cards'] },
-              { title: 'Ajuda', links: ['Guia de Tamanhos', 'Entrega', 'Devoluções', 'Contato'] },
-              { title: 'Empresa', links: ['Filosofia', 'Sustentabilidade', 'Imprensa', 'Carreiras'] },
+              { title: 'Loja', links: [
+                { label: 'Coleção', href: '#collection' },
+                { label: 'ΔΥΝΑΜΙΣ', href: '/produto/dynamis' },
+                { label: 'Novidades', href: '#collection' },
+                { label: 'Kit Gostosa Grega', href: '#collection' },
+              ]},
+              { title: 'Ajuda', links: [
+                { label: 'Guia de Tamanhos', href: '#collection' },
+                { label: 'Entrega', href: '#collection' },
+                { label: 'Devoluções', href: '#collection' },
+                { label: 'Contato', href: '#' },
+              ]},
+              { title: 'Empresa', links: [
+                { label: 'Filosofia', href: '#philosophy' },
+                { label: 'Campanha', href: '#campaign' },
+                { label: 'Instagram', href: '#' },
+                { label: 'TikTok', href: '#' },
+              ]},
             ].map(col => (
               <div key={col.title}>
                 <p className="text-[#1A1A1A] text-[9px] tracking-[0.3em] uppercase mb-6 font-medium">{col.title}</p>
                 <ul className="space-y-3.5">
                   {col.links.map(l => (
-                    <li key={l}>
-                      <a href="#" className="text-[#6F6A5F]/70 text-[10px] font-light tracking-wide hover:text-[#1A1A1A] transition-colors duration-300">
-                        {l}
+                    <li key={l.label}>
+                      <a href={l.href} className="text-[#6F6A5F]/70 text-[10px] font-light tracking-wide hover:text-[#1A1A1A] transition-colors duration-300">
+                        {l.label}
                       </a>
                     </li>
                   ))}

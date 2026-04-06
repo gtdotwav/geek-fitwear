@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag, Minus, Plus, Trash2, Sparkles } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Sparkles, Loader2, MapPin, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useCart } from '@/context/CartContext';
+import { useCart, CartItem } from '@/context/CartContext';
 import { products, Product } from '@/data/products';
 
-const FREE_SHIPPING = 299.9;
+const FREE_SHIPPING = 100;
 const PIECE_PROMO = 0.5;   // 50% off on extra piece
 const SET_PROMO = 0.8;     // 80% off on second set
 
@@ -17,7 +17,7 @@ function BundleCard({ product, promoPrice, discount, onAdd }: {
   discount: number;
   onAdd: (size: string) => void;
 }) {
-  const [size, setSize] = useState('M');
+  const [size, setSize] = useState(product.sizes[0] || 'M');
 
   return (
     <motion.div
@@ -219,14 +219,21 @@ export default function CartDrawer() {
                               {item.promoLabel && (
                                 <span className="text-[#C2A27C] text-[8px] tracking-[0.1em] uppercase font-medium">{item.promoLabel}</span>
                               )}
-                              {item.promoPrice && (
+                              {item.promoPrice ? (
                                 <span className="text-[#6F6A5F] text-[10px] line-through">
                                   R$ {item.product.pixPrice.toFixed(2).replace('.', ',')}
                                 </span>
-                              )}
+                              ) : item.product.originalPrice > item.product.pixPrice ? (
+                                <span className="text-[#6F6A5F] text-[10px] line-through">
+                                  R$ {item.product.originalPrice.toFixed(2).replace('.', ',')}
+                                </span>
+                              ) : null}
                               <span className="text-[#1A1A1A] font-light text-sm">
                                 R$ {price.toFixed(2).replace('.', ',')}
                               </span>
+                              {!item.promoLabel && item.product.originalPrice > item.product.pixPrice && (
+                                <span className="text-[#C2A27C] text-[8px] tracking-[0.1em] uppercase font-medium">PIX</span>
+                              )}
                             </div>
                             <div className="flex items-center justify-between mt-3">
                               <div className="flex items-center gap-3 border-b border-[#E6DFD2] pb-1">
@@ -310,34 +317,242 @@ export default function CartDrawer() {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="px-8 py-7 border-t border-[#E6DFD2] space-y-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[#6F6A5F] text-[9px] tracking-[0.25em] uppercase">Total · Pix</span>
-                  <span className="text-[#1A1A1A] font-light text-xl">
-                    R$ {total.toFixed(2).replace('.', ',')}
-                  </span>
-                </div>
-                <p className="text-[#6F6A5F] text-[9px] tracking-wide">
-                  ou 12x · Compra segura · Devoluções grátis
-                </p>
-                <button
-                  onClick={() => {
-                    const msg = items.map(i => {
-                      const price = i.promoPrice ?? i.product.pixPrice;
-                      return `• ${i.product.name} — Tam. ${i.size}${i.variant === 'com-logo' ? ' (Com Logo)' : i.variant === 'sem-logo' ? ' (Sem Logo)' : ''}${i.promoLabel ? ` (${i.promoLabel})` : ''} — ${i.quantity}x R$ ${price.toFixed(2).replace('.', ',')}`;
-                    }).join('\n');
-                    const text = encodeURIComponent(`Olá! Gostaria de finalizar meu pedido:\n\n${msg}\n\nTotal Pix: R$ ${total.toFixed(2).replace('.', ',')}`);
-                    window.open(`https://wa.me/5511999999999?text=${text}`, '_blank');
-                  }}
-                  className="w-full bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8] py-4 text-[9px] tracking-[0.35em] uppercase font-medium transition-colors"
-                >
-                  Finalizar Pedido
-                </button>
-              </div>
+              <CartFooter items={items} total={total} />
             )}
           </motion.div>
         </>
       )}
     </AnimatePresence>
+  );
+}
+
+/* ─── Cart Footer with Checkout ─── */
+
+function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
+  const [step, setStep] = useState<'cart' | 'form' | 'address'>('cart');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [document, setDocument] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Address
+  const [addrCep, setAddrCep] = useState('');
+  const [addrStreet, setAddrStreet] = useState('');
+  const [addrNumber, setAddrNumber] = useState('');
+  const [addrComplement, setAddrComplement] = useState('');
+  const [addrNeighborhood, setAddrNeighborhood] = useState('');
+  const [addrCity, setAddrCity] = useState('');
+  const [addrState, setAddrState] = useState('');
+  const [cepLoading, setCepLoading] = useState(false);
+
+  const formatPhone = (v: string) => {
+    const d = v.replace(/\D/g, '').slice(0, 11);
+    if (d.length <= 2) return d;
+    if (d.length <= 7) return `(${d.slice(0,2)}) ${d.slice(2)}`;
+    return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+  };
+
+  const formatCpf = (v: string) => {
+    const d = v.replace(/\D/g, '').slice(0, 11);
+    if (d.length <= 3) return d;
+    if (d.length <= 6) return `${d.slice(0, 3)}.${d.slice(3)}`;
+    if (d.length <= 9) return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6)}`;
+    return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}`;
+  };
+
+  const formatCep = (v: string) => {
+    const d = v.replace(/\D/g, '').slice(0, 8);
+    if (d.length <= 5) return d;
+    return `${d.slice(0, 5)}-${d.slice(5)}`;
+  };
+
+  const lookupCep = useCallback(async (cep: string) => {
+    const digits = cep.replace(/\D/g, '');
+    if (digits.length !== 8) return;
+    setCepLoading(true);
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+      const data = await res.json();
+      if (!data.erro) {
+        setAddrStreet(data.logradouro || '');
+        setAddrNeighborhood(data.bairro || '');
+        setAddrCity(data.localidade || '');
+        setAddrState(data.uf || '');
+      }
+    } catch { /* ignore */ }
+    setCepLoading(false);
+  }, []);
+
+  const buildBody = useCallback(() => ({
+    items: items.map(i => ({
+      name: i.product.name,
+      size: i.size,
+      variant: i.variant,
+      quantity: i.quantity,
+      price: i.promoPrice ?? i.product.pixPrice,
+    })),
+    customer: {
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.replace(/\D/g, ''),
+      document: document.replace(/\D/g, ''),
+    },
+    address: {
+      cep: addrCep.replace(/\D/g, ''),
+      street: addrStreet.trim(),
+      number: addrNumber.trim(),
+      complement: addrComplement.trim() || undefined,
+      neighborhood: addrNeighborhood.trim(),
+      city: addrCity.trim(),
+      state: addrState.trim(),
+    },
+  }), [items, name, email, phone, document, addrCep, addrStreet, addrNumber, addrComplement, addrNeighborhood, addrCity, addrState]);
+
+  const handleCheckout = useCallback(async () => {
+    if (!addrCep.replace(/\D/g, '') || !addrStreet.trim() || !addrNumber.trim() || !addrNeighborhood.trim() || !addrCity.trim() || !addrState.trim()) {
+      setError('Preencha o endereço completo.');
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildBody()),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.checkoutUrl) {
+        setError(data.error || 'Erro ao criar pagamento.');
+        return;
+      }
+
+      window.open(data.checkoutUrl, '_blank');
+    } catch {
+      setError('Erro de conexão. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  }, [buildBody, addrCep, addrStreet, addrNumber, addrNeighborhood, addrCity, addrState]);
+
+  const inputCls = "w-full bg-transparent border-b border-[#E6DFD2] focus:border-[#A88F6A] px-0 py-2 text-[#1A1A1A] text-xs font-light placeholder-[#C2A27C]/50 focus:outline-none transition-colors";
+
+  return (
+    <div className="px-8 py-7 border-t border-[#E6DFD2] space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-[#6F6A5F] text-[9px] tracking-[0.25em] uppercase">Total · Pix</span>
+        <span className="text-[#1A1A1A] font-light text-xl">
+          R$ {total.toFixed(2).replace('.', ',')}
+        </span>
+      </div>
+      <p className="text-[#6F6A5F] text-[9px] tracking-wide">
+        ou 12× R$ {(total / 12).toFixed(2).replace('.', ',')} sem juros · Compra segura · Devoluções grátis
+      </p>
+
+      <AnimatePresence mode="wait">
+        {step === 'cart' && (
+          <motion.button
+            key="cta"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setStep('form')}
+            className="w-full bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8] py-4 text-[9px] tracking-[0.35em] uppercase font-medium transition-colors"
+          >
+            Finalizar Pedido
+          </motion.button>
+        )}
+
+        {step === 'form' && (
+          <motion.div
+            key="form"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="space-y-3"
+          >
+            <p className="text-[#6F6A5F] text-[9px] tracking-[0.2em] uppercase">1/2 · Seus dados</p>
+            <input type="text" placeholder="Nome completo" value={name} onChange={e => setName(e.target.value)} className={inputCls} />
+            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className={inputCls} />
+            <input type="text" inputMode="numeric" placeholder="CPF" value={document} onChange={e => setDocument(formatCpf(e.target.value))} className={inputCls} />
+            <input type="tel" placeholder="(11) 99999-9999" value={phone} onChange={e => setPhone(formatPhone(e.target.value))} className={inputCls} />
+
+            {error && <p className="text-red-400 text-[10px] font-light">{error}</p>}
+
+            <div className="flex gap-2 pt-1">
+              <button onClick={() => { setStep('cart'); setError(''); }}
+                className="flex-1 border border-[#E6DFD2] text-[#6F6A5F] py-3.5 text-[9px] tracking-[0.2em] uppercase font-medium hover:border-[#A88F6A] transition-colors">
+                Voltar
+              </button>
+              <button onClick={() => {
+                if (!name.trim() || !email.trim() || phone.replace(/\D/g, '').length < 10 || document.replace(/\D/g, '').length !== 11) {
+                  setError('Preencha todos os campos corretamente.');
+                  return;
+                }
+                setError('');
+                setStep('address');
+              }}
+                className="flex-1 bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8] py-3.5 text-[9px] tracking-[0.2em] uppercase font-medium transition-colors flex items-center justify-center gap-1">
+                Continuar <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {step === 'address' && (
+          <motion.div
+            key="address"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="space-y-3"
+          >
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#C2A27C]" />
+              <p className="text-[#6F6A5F] text-[9px] tracking-[0.2em] uppercase">2/2 · Endereço de entrega</p>
+            </div>
+            <div className="relative">
+              <input type="text" placeholder="CEP" value={addrCep}
+                onChange={e => {
+                  const formatted = formatCep(e.target.value);
+                  setAddrCep(formatted);
+                  if (formatted.replace(/\D/g, '').length === 8) lookupCep(formatted);
+                }}
+                className={inputCls} />
+              {cepLoading && <Loader2 className="absolute right-0 top-2 w-3.5 h-3.5 text-[#C2A27C] animate-spin" />}
+            </div>
+            <input type="text" placeholder="Rua / Avenida" value={addrStreet} onChange={e => setAddrStreet(e.target.value)} className={inputCls} />
+            <div className="flex gap-3">
+              <input type="text" placeholder="Número" value={addrNumber} onChange={e => setAddrNumber(e.target.value)} className={`w-1/3 ${inputCls.replace('w-full ', '')}`} />
+              <input type="text" placeholder="Complemento" value={addrComplement} onChange={e => setAddrComplement(e.target.value)} className={`flex-1 ${inputCls.replace('w-full ', '')}`} />
+            </div>
+            <input type="text" placeholder="Bairro" value={addrNeighborhood} onChange={e => setAddrNeighborhood(e.target.value)} className={inputCls} />
+            <div className="flex gap-3">
+              <input type="text" placeholder="Cidade" value={addrCity} onChange={e => setAddrCity(e.target.value)} className={`flex-1 ${inputCls.replace('w-full ', '')}`} />
+              <input type="text" placeholder="UF" value={addrState} maxLength={2} onChange={e => setAddrState(e.target.value.toUpperCase())} className={`w-14 text-center ${inputCls.replace('w-full ', '')}`} />
+            </div>
+
+            {error && <p className="text-red-400 text-[10px] font-light">{error}</p>}
+
+            <div className="flex gap-2 pt-1">
+              <button onClick={() => { setStep('form'); setError(''); }}
+                className="flex-1 border border-[#E6DFD2] text-[#6F6A5F] py-3.5 text-[9px] tracking-[0.2em] uppercase font-medium hover:border-[#A88F6A] transition-colors">
+                Voltar
+              </button>
+              <button onClick={handleCheckout} disabled={loading}
+                className="flex-1 bg-[#1A1A1A] hover:bg-[#2B2B2B] disabled:opacity-50 text-[#F5F1E8] py-3.5 text-[9px] tracking-[0.2em] uppercase font-medium transition-colors flex items-center justify-center gap-2">
+                {loading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Aguarde...</> : 'Pagar com PIX'}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

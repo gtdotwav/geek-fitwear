@@ -1,10 +1,19 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { Product } from '@/data/products';
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import { Product, products } from '@/data/products';
 
 export interface CartItem {
   product: Product;
+  size: string;
+  variant?: string;
+  quantity: number;
+  promoPrice?: number;
+  promoLabel?: string;
+}
+
+interface SerializedCartItem {
+  productId: string;
   size: string;
   variant?: string;
   quantity: number;
@@ -24,11 +33,57 @@ interface CartContextType {
   itemCount: number;
 }
 
+const STORAGE_KEY = 'greekfit-cart';
+
+function loadCart(): CartItem[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed: SerializedCartItem[] = JSON.parse(raw);
+    const result: CartItem[] = [];
+    for (const s of parsed) {
+      const product = products.find(p => p.id === s.productId);
+      if (product) {
+        result.push({ product, size: s.size, variant: s.variant, quantity: s.quantity, promoPrice: s.promoPrice, promoLabel: s.promoLabel });
+      }
+    }
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+function saveCart(items: CartItem[]) {
+  if (typeof window === 'undefined') return;
+  const serialized: SerializedCartItem[] = items.map(i => ({
+    productId: i.product.id,
+    size: i.size,
+    variant: i.variant,
+    quantity: i.quantity,
+    promoPrice: i.promoPrice,
+    promoLabel: i.promoLabel,
+  }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
+}
+
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Hydrate from localStorage on mount
+  useEffect(() => {
+    setItems(loadCart());
+    setHydrated(true);
+  }, []);
+
+  // Persist to localStorage on every change (after hydration)
+  useEffect(() => {
+    if (hydrated) saveCart(items);
+  }, [items, hydrated]);
 
   const addItem = useCallback((product: Product, size: string, variant?: string, promoPrice?: number, promoLabel?: string) => {
     setItems(prev => {

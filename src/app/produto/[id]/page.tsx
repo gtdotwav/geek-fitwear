@@ -34,6 +34,12 @@ export default function ProductPage({ params }: Props) {
   const discount = Math.round(((product.originalPrice - product.pixPrice) / product.originalPrice) * 100);
   const related = products.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
 
+  // Deterministic rating per product
+  const idHash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const rating = (4.7 + (idHash % 4) * 0.1).toFixed(1);
+  const reviewCount = 80 + (idHash % 120);
+  const lowStock = product.stock <= 18;
+
   const handleColorChange = (i: number) => { setActiveColor(i); setActiveImage(0); };
 
   const handleAdd = () => {
@@ -144,12 +150,19 @@ export default function ProductPage({ params }: Props) {
               </h1>
             </div>
 
-            {/* Stars */}
-            <div className="flex items-center gap-3 pb-8 border-b border-[#E6DFD2]">
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-[#A88F6A] fill-[#A88F6A]" />)}
+            {/* Stars + Stock */}
+            <div className="flex items-center justify-between pb-8 border-b border-[#E6DFD2]">
+              <div className="flex items-center gap-3">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-[#A88F6A] fill-[#A88F6A]" />)}
+                </div>
+                <span className="text-[#6F6A5F] text-[10px] font-light">{rating} · {reviewCount} avaliações</span>
               </div>
-              <span className="text-[#6F6A5F] text-[10px] font-light">4.9 · 127 avaliações</span>
+              {lowStock && (
+                <span className="text-[#C2A27C] text-[9px] tracking-[0.15em] uppercase font-medium">
+                  Últimas {product.stock} peças
+                </span>
+              )}
             </div>
 
             {/* Price */}
@@ -273,7 +286,7 @@ export default function ProductPage({ params }: Props) {
             </button>
 
             {/* Description */}
-            <p className="text-[#6F6A5F] font-light text-sm leading-relaxed italic border-l-2 border-[#E6DFD2] pl-5">
+            <p className="text-[#6F6A5F] font-light text-sm leading-relaxed border-l-2 border-[#E6DFD2] pl-5">
               {product.description}
             </p>
 

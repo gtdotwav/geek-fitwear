@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import CartDrawer from '@/components/CartDrawer';
-import WhatsAppButton from '@/components/WhatsAppButton';
+import ChatWidget from '@/components/ChatWidget';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -32,6 +32,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${outfit.variable} ${inter.variable}`}>
@@ -40,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <CartDrawer />
           {children}
-          <WhatsAppButton />
+          <ChatWidget />
         </CartProvider>
       </body>
     </html>

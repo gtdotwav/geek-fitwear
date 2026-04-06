@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const slides = [
   { id: 1, image: '/banners/1.png' },
@@ -10,6 +11,7 @@ const slides = [
   { id: 3, image: '/banners/5.png' },
   { id: 4, image: '/banners/13.png' },
   { id: 5, image: '/banners/10.png' },
+  { id: 6, image: '/banners/15.png' },
 ];
 
 export default function HeroSlider() {
@@ -49,7 +51,24 @@ export default function HeroSlider() {
       </AnimatePresence>
 
       {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/30 pointer-events-none" />
+
+      {/* CTA Button — centered */}
+      <div className="absolute inset-0 flex items-end justify-center pb-20 md:pb-24 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="pointer-events-auto"
+        >
+          <Link
+            href="#collection"
+            className="bg-[#F5F1E8]/90 hover:bg-[#F5F1E8] text-[#1A1A1A] px-8 py-3.5 text-[9px] tracking-[0.35em] uppercase font-medium backdrop-blur-sm transition-all duration-300 hover:shadow-lg"
+          >
+            Ver Coleção
+          </Link>
+        </motion.div>
+      </div>
 
       {/* Bottom: dots + scroll cue */}
       <div className="absolute bottom-3 md:bottom-8 left-0 right-0 flex items-center justify-between px-5 md:px-8 lg:px-12">
