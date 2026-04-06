@@ -822,50 +822,60 @@ export default function ChatWidget() {
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-white/80 border border-[#C2A27C]/30 rounded-sm overflow-hidden"
                 >
-                  {pixData.pixQrCode ? (
-                    <div className="p-4 space-y-3">
-                      <div className="text-center">
-                        <p className="text-[#1A1A1A] text-[11px] font-medium tracking-wide mb-3">Escaneie o QR Code para pagar</p>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={pixData.pixQrCode} alt="QR Code PIX" className="w-44 h-44 sm:w-40 sm:h-40 mx-auto border border-[#E6DFD2] p-2 bg-white" />
-                      </div>
-                      <button
-                        onClick={copyPix}
-                        className="w-full flex items-center justify-center gap-2 bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8] py-3 text-[9px] tracking-[0.2em] uppercase font-medium transition-colors"
-                      >
-                        {pixCopied ? <><Check className="w-3.5 h-3.5" /> Codigo Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar Codigo PIX</>}
-                      </button>
-                      <div className="bg-[#E6DFD2]/40 px-3 py-2 text-[8px] text-[#6F6A5F] font-mono break-all rounded-sm leading-relaxed">
-                        {pixData.pixCode}
-                      </div>
-                      <div className="flex items-center justify-center gap-2 py-1">
-                        <Loader2 className="w-3 h-3 text-[#C2A27C] animate-spin" />
-                        <p className="text-[#6F6A5F] text-[9px] tracking-wide">Aguardando pagamento...</p>
-                      </div>
-                      {pixData.checkoutUrl && (
-                        <a
-                          href={pixData.checkoutUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-1.5 w-full text-[#6F6A5F]/50 py-1 text-[7px] tracking-[0.1em] uppercase hover:text-[#6F6A5F] transition-colors"
-                        >
-                          <ExternalLink className="w-2.5 h-2.5" /> checkout externo
-                        </a>
-                      )}
+                  <div className="p-4 space-y-3">
+                    {/* QR Code — always show (API image or fallback) */}
+                    <div className="text-center">
+                      <p className="text-[#1A1A1A] text-[11px] font-medium tracking-wide mb-3">Escaneie o QR Code para pagar</p>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={
+                          pixData.pixQrCode ||
+                          (pixData.pixCode
+                            ? `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixData.pixCode)}`
+                            : '')
+                        }
+                        alt="QR Code PIX"
+                        className="w-36 h-36 sm:w-40 sm:h-40 mx-auto border border-[#E6DFD2] p-2 bg-white"
+                      />
                     </div>
-                  ) : (
-                    <div className="p-4 text-center space-y-3">
-                      <p className="text-[#6F6A5F] text-[10px]">PIX gerado! Finalize o pagamento:</p>
+
+                    {/* Copy button */}
+                    {pixData.pixCode && (
+                      <>
+                        <button
+                          onClick={copyPix}
+                          className={`w-full flex items-center justify-center gap-2 py-3 text-[9px] tracking-[0.2em] uppercase font-medium transition-colors ${
+                            pixCopied
+                              ? 'bg-[#A88F6A] text-[#F5F1E8]'
+                              : 'bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8]'
+                          }`}
+                        >
+                          {pixCopied ? <><Check className="w-3.5 h-3.5" /> Código copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar código PIX</>}
+                        </button>
+                        <div className="bg-[#E6DFD2]/40 px-3 py-2 text-[8px] text-[#6F6A5F] font-mono break-all rounded-sm leading-relaxed max-h-14 overflow-y-auto">
+                          {pixData.pixCode}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Waiting indicator */}
+                    <div className="flex items-center justify-center gap-2 py-1">
+                      <Loader2 className="w-3 h-3 text-[#C2A27C] animate-spin" />
+                      <p className="text-[#6F6A5F] text-[9px] tracking-wide">Aguardando pagamento...</p>
+                    </div>
+
+                    {/* External checkout — secondary */}
+                    {pixData.checkoutUrl && (
                       <a
                         href={pixData.checkoutUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full bg-[#1A1A1A] text-[#F5F1E8] py-3 text-[9px] tracking-[0.2em] uppercase font-medium hover:bg-[#2B2B2B] transition-colors"
+                        className="flex items-center justify-center gap-1.5 w-full text-[#6F6A5F]/50 py-1 text-[7px] tracking-[0.1em] uppercase hover:text-[#6F6A5F] transition-colors"
                       >
-                        <ExternalLink className="w-3 h-3" /> Abrir Pagamento
+                        <ExternalLink className="w-2.5 h-2.5" /> checkout externo
                       </a>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </motion.div>
               )}
 

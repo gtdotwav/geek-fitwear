@@ -590,40 +590,53 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
               </p>
             </div>
 
-            {pixResult.pixQrCode ? (
-              <div className="flex flex-col items-center gap-3">
-                <p className="text-[#6F6A5F] text-[10px] font-light">Escaneie o QR Code para pagar</p>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={pixResult.pixQrCode} alt="QR Code PIX" className="w-44 h-44 mx-auto border border-[#E6DFD2] p-2 bg-white" />
+            {/* QR Code — always show (API image or fallback) */}
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-[#6F6A5F] text-[10px] font-light">Escaneie o QR Code para pagar</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={
+                  pixResult.pixQrCode ||
+                  (pixResult.pixCode
+                    ? `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixResult.pixCode)}`
+                    : '')
+                }
+                alt="QR Code PIX"
+                className="w-40 h-40 sm:w-44 sm:h-44 mx-auto border border-[#E6DFD2] p-2 bg-white"
+              />
+              <div className="flex items-center gap-2 pt-1">
+                <Loader2 className="w-3 h-3 text-[#C2A27C] animate-spin" />
+                <p className="text-[#6F6A5F] text-[9px] tracking-wide">Aguardando pagamento...</p>
               </div>
-            ) : (
-              <p className="text-[#6F6A5F] text-[10px] font-light text-center">Copie o código PIX abaixo para pagar</p>
-            )}
+            </div>
 
+            {/* PIX code + copy */}
             {pixResult.pixCode && (
               <div className="space-y-2">
-                <div className="bg-[#E6DFD2]/50 p-3 rounded-sm">
-                  <p className="text-[#1A1A1A] text-[10px] font-mono break-all leading-relaxed">{pixResult.pixCode}</p>
+                <p className="text-[#6F6A5F] text-[8px] tracking-[0.15em] uppercase text-center">Ou copie o código</p>
+                <div className="bg-[#E6DFD2]/50 p-3 rounded-sm max-h-16 overflow-y-auto">
+                  <p className="text-[#1A1A1A] text-[9px] font-mono break-all leading-relaxed select-all">{pixResult.pixCode}</p>
                 </div>
                 <button
                   onClick={handleCopyPix}
-                  className={`w-full py-3 text-[9px] tracking-[0.2em] uppercase font-medium flex items-center justify-center gap-2 transition-all ${
+                  className={`w-full py-3.5 text-[9px] tracking-[0.2em] uppercase font-medium flex items-center justify-center gap-2 transition-all ${
                     pixCopied
                       ? 'bg-[#A88F6A] text-[#F5F1E8]'
                       : 'bg-[#1A1A1A] hover:bg-[#2B2B2B] text-[#F5F1E8]'
                   }`}
                 >
-                  {pixCopied ? <><Check className="w-3.5 h-3.5" /> Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar código PIX</>}
+                  {pixCopied ? <><Check className="w-3.5 h-3.5" /> Código copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar código PIX</>}
                 </button>
               </div>
             )}
 
+            {/* External checkout — secondary */}
             {pixResult.checkoutUrl && (
               <button
                 onClick={() => window.open(pixResult.checkoutUrl, '_blank')}
-                className="w-full border border-[#E6DFD2] text-[#6F6A5F] py-3 text-[9px] tracking-[0.2em] uppercase font-medium hover:border-[#A88F6A] transition-colors flex items-center justify-center gap-1.5"
+                className="w-full border border-[#E6DFD2] text-[#6F6A5F] py-2.5 text-[8px] tracking-[0.15em] uppercase font-light hover:border-[#A88F6A] transition-colors flex items-center justify-center gap-1.5"
               >
-                <ExternalLink className="w-3 h-3" /> Checkout externo
+                <ExternalLink className="w-2.5 h-2.5" /> Pagar no checkout externo
               </button>
             )}
           </motion.div>
