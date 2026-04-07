@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag, Minus, Plus, Trash2, Sparkles, Loader2, MapPin, ChevronRight, Copy, Check, ExternalLink } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Loader2, MapPin, ChevronRight, Copy, Check, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import { useCart, CartItem } from '@/context/CartContext';
 import { products, Product } from '@/data/products';
@@ -265,7 +265,7 @@ export default function CartDrawer() {
                 <div className="px-8 pb-6">
                   <div className="border-t border-[#E6DFD2] pt-6">
                     <div className="flex items-center gap-2 mb-4">
-                      <Sparkles className="w-3.5 h-3.5 text-[#C2A27C]" strokeWidth={1.5} />
+                      <Tag className="w-3.5 h-3.5 text-[#C2A27C]" strokeWidth={1.5} />
                       <span className="text-[#C2A27C] text-[9px] tracking-[0.3em] uppercase font-medium">
                         Ofertas Exclusivas
                       </span>

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Minus, Plus, Trash2, ShoppingBag, Loader2, ExternalLink, Check, Copy, Sparkles, MapPin, ChevronRight } from 'lucide-react';
+import { MessageCircle, X, Send, Minus, Plus, Trash2, ShoppingBag, Loader2, ExternalLink, Check, Copy, Tag, MapPin, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { products, Product } from '@/data/products';
 
@@ -53,7 +53,7 @@ function ChatText({ text }: { text: string }) {
 }
 
 /* ─── Constants ─── */
-const GREETING = 'Oi! Sou a Sofia, sua personal stylist GreekFit 💛\nPosso te ajudar a escolher a peça perfeita — e você compra tudo aqui, sem sair do chat!\n\nO que procura hoje?';
+const GREETING = 'Oi! Sou a Sofia, sua personal stylist GreekFit.\nPosso te ajudar a escolher a peça perfeita — e você compra tudo aqui, sem sair do chat.\n\nO que procura hoje?';
 
 
 /* ─── Component ─── */
@@ -181,7 +181,7 @@ export default function ChatWidget() {
         products: data.products || undefined,
       }]);
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Ops, tive um probleminha. Pode tentar de novo? 💛' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Ops, tive um probleminha. Pode tentar de novo?' }]);
     } finally {
       setLoading(false);
     }
@@ -201,7 +201,7 @@ export default function ChatWidget() {
     // Add a confirmation message
     setMessages(prev => [...prev, {
       role: 'assistant',
-      content: `Adicionei o ${product.name} (tam. ${size}) na sua sacola! 🛍️ Quer adicionar mais alguma peça ou finalizar?`,
+      content: `Adicionei o ${product.name} (tam. ${size}) na sua sacola. Quer adicionar mais alguma peça ou finalizar?`,
     }]);
   };
 
@@ -210,7 +210,7 @@ export default function ChatWidget() {
     setBundleSizeSelecting(null);
     setMessages(prev => [...prev, {
       role: 'assistant',
-      content: `Ótima escolha! Adicionei o ${product.name} (tam. ${size}) com desconto especial 🔥 Quer mais alguma coisa?`,
+      content: `Ótima escolha! Adicionei o ${product.name} (tam. ${size}) com desconto especial. Quer mais alguma coisa?`,
     }]);
   };
 
@@ -338,13 +338,13 @@ export default function ChatWidget() {
       if (session.pixCode) {
         setMessages(prev => [...prev, {
           role: 'assistant',
-          content: `Seu PIX de R$ ${cartTotal.toFixed(2).replace('.', ',')} foi gerado! Copie o código ou escaneie o QR Code abaixo para pagar 👇`,
+          content: `Seu PIX de R$ ${cartTotal.toFixed(2).replace('.', ',')} foi gerado! Copie o código ou escaneie o QR Code abaixo para pagar.`,
         }]);
         pollPayment(session.sessionId);
       } else {
         setMessages(prev => [...prev, {
           role: 'assistant',
-          content: `Seu pedido de R$ ${cartTotal.toFixed(2).replace('.', ',')} foi criado! Finalize o pagamento no link abaixo 👇`,
+          content: `Seu pedido de R$ ${cartTotal.toFixed(2).replace('.', ',')} foi criado! Finalize o pagamento no link abaixo.`,
         }]);
       }
     } catch {
@@ -366,7 +366,7 @@ export default function ChatWidget() {
           setCheckoutStep('success');
           setMessages(prev => [...prev, {
             role: 'assistant',
-            content: 'Pagamento confirmado! Seu pedido foi aprovado. Você vai receber tudo certinho no email. Obrigada por escolher a GreekFit 💛',
+            content: 'Pagamento confirmado! Seu pedido foi aprovado. Você vai receber tudo certinho no email. Obrigada por escolher a GreekFit.',
           }]);
         }
       } catch { /* ignore */ }
@@ -594,7 +594,7 @@ export default function ChatWidget() {
                   {bundles.length > 0 && checkoutStep === 'idle' && (
                     <div className="px-4 py-3 border-t border-[#E6DFD2]">
                       <div className="flex items-center gap-1.5 mb-3">
-                        <Sparkles className="w-3 h-3 text-[#C2A27C]" strokeWidth={1.5} />
+                        <Tag className="w-3 h-3 text-[#C2A27C]" strokeWidth={1.5} />
                         <span className="text-[#C2A27C] text-[8px] tracking-[0.25em] uppercase font-medium">
                           Ofertas exclusivas pra você
                         </span>
