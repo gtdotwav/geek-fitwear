@@ -5,8 +5,7 @@ import { motion } from 'framer-motion';
 export default function WhatsAppButton() {
   return (
     <motion.a
-      // TODO: Replace with real WhatsApp number
-      href="https://wa.me/5511999999999?text=Olá! Tenho interesse nos produtos GreekFit."
+      href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5511999999999'}?text=Olá! Tenho interesse nos produtos GreekFit.`}
       target="_blank"
       rel="noopener noreferrer"
       initial={{ opacity: 0 }}

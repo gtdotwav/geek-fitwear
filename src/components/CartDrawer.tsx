@@ -2,12 +2,12 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Loader2, MapPin, ChevronRight, Copy, Check, ExternalLink } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Loader2, MapPin, ChevronRight, Copy, Check, ExternalLink, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import { useCart, CartItem } from '@/context/CartContext';
 import { products, Product } from '@/data/products';
 
-const FREE_SHIPPING = 100;
+const FREE_SHIPPING = 299;
 const PIECE_PROMO = 0.5;   // 50% off on extra piece
 const SET_PROMO = 0.8;     // 80% off on second set
 
@@ -333,10 +333,13 @@ interface PixResult {
   pixQrCode: string;
   checkoutUrl: string;
   amount: number;
+  orderId: string;
+  shippingCost: number;
+  shippingDays: number;
 }
 
 function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
-  const [step, setStep] = useState<'cart' | 'form' | 'address' | 'pix'>('cart');
+  const [step, setStep] = useState<'cart' | 'form' | 'address' | 'pix' | 'success'>('cart');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -355,6 +358,7 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
   const [addrCity, setAddrCity] = useState('');
   const [addrState, setAddrState] = useState('');
   const [cepLoading, setCepLoading] = useState(false);
+  const [shippingQuote, setShippingQuote] = useState<{ cost: number; estimatedDays: number; label: string; free: boolean } | null>(null);
 
   const formatPhone = (v: string) => {
     const d = v.replace(/\D/g, '').slice(0, 11);
@@ -382,25 +386,35 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
     if (digits.length !== 8) return;
     setCepLoading(true);
     try {
-      const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
-      const data = await res.json();
-      if (!data.erro) {
-        setAddrStreet(data.logradouro || '');
-        setAddrNeighborhood(data.bairro || '');
-        setAddrCity(data.localidade || '');
-        setAddrState(data.uf || '');
+      const [addrRes, shipRes] = await Promise.all([
+        fetch(`https://viacep.com.br/ws/${digits}/json/`),
+        fetch(`/api/shipping?cep=${digits}&subtotal=${total}`),
+      ]);
+      const addrData = await addrRes.json();
+      if (!addrData.erro) {
+        setAddrStreet(addrData.logradouro || '');
+        setAddrNeighborhood(addrData.bairro || '');
+        setAddrCity(addrData.localidade || '');
+        setAddrState(addrData.uf || '');
+      }
+      const shipData = await shipRes.json();
+      if (!shipData.error) {
+        setShippingQuote(shipData);
       }
     } catch { /* ignore */ }
     setCepLoading(false);
-  }, []);
+  }, [total]);
 
   const buildBody = useCallback(() => ({
     items: items.map(i => ({
+      id: i.product.id,
       name: i.product.name,
+      category: i.product.category,
       size: i.size,
       variant: i.variant,
       quantity: i.quantity,
       price: i.promoPrice ?? i.product.pixPrice,
+      promoLabel: i.promoLabel,
     })),
     customer: {
       name: name.trim(),
@@ -447,8 +461,27 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
         pixQrCode: data.pixQrCode || '',
         checkoutUrl: data.checkoutUrl || '',
         amount: data.amount || total,
+        orderId: data.orderId || '',
+        shippingCost: data.shippingCost || 0,
+        shippingDays: data.shippingDays || 0,
       });
       setStep('pix');
+
+      // Poll for payment confirmation
+      if (data.sessionId) {
+        const interval = setInterval(async () => {
+          try {
+            const statusRes = await fetch(`/api/checkout/status?id=${data.sessionId}`);
+            const statusData = await statusRes.json();
+            if (statusData.status === 'paid') {
+              clearInterval(interval);
+              setStep('success');
+            }
+          } catch { /* ignore */ }
+        }, 5000);
+        // Clear after 30 minutes
+        setTimeout(() => clearInterval(interval), 30 * 60 * 1000);
+      }
     } catch {
       setError('Erro de conexão. Tente novamente.');
     } finally {
@@ -560,6 +593,20 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
               <input type="text" placeholder="UF" value={addrState} maxLength={2} onChange={e => setAddrState(e.target.value.toUpperCase())} className={`w-14 text-center ${inputCls.replace('w-full ', '')}`} />
             </div>
 
+            {/* Shipping quote */}
+            {shippingQuote && (
+              <div className="bg-[#E6DFD2]/40 p-3 rounded-sm">
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-light ${shippingQuote.free ? 'text-[#A88F6A]' : 'text-[#1A1A1A]'}`}>
+                    {shippingQuote.free ? 'Frete grátis' : `Frete: R$ ${shippingQuote.cost.toFixed(2).replace('.', ',')}`}
+                  </span>
+                  <span className="text-[#6F6A5F] text-[10px] font-light">
+                    {shippingQuote.estimatedDays} dias úteis
+                  </span>
+                </div>
+              </div>
+            )}
+
             {error && <p className="text-red-400 text-[10px] font-light">{error}</p>}
 
             <div className="flex gap-2 pt-1">
@@ -638,6 +685,33 @@ function CartFooter({ items, total }: { items: CartItem[]; total: number }) {
               >
                 <ExternalLink className="w-2.5 h-2.5" /> Pagar no checkout externo
               </button>
+            )}
+          </motion.div>
+        )}
+        {step === 'success' && pixResult && (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="space-y-4 text-center"
+          >
+            <div className="flex justify-center">
+              <CheckCircle2 className="w-12 h-12 text-[#A88F6A]" strokeWidth={1} />
+            </div>
+            <div>
+              <p className="text-[#1A1A1A] font-serif font-extralight text-xl mb-1">Pagamento confirmado!</p>
+              <p className="text-[#6F6A5F] text-xs font-light leading-relaxed">
+                Seu pedido foi recebido e está sendo preparado.
+                Você receberá um email de confirmação em instantes.
+              </p>
+            </div>
+            {pixResult.orderId && (
+              <a
+                href={`/pedido/${pixResult.orderId}`}
+                className="inline-block bg-[#1A1A1A] text-[#F5F1E8] px-8 py-3.5 text-[9px] tracking-[0.3em] uppercase font-medium hover:bg-[#2B2B2B] transition-colors"
+              >
+                Acompanhar Pedido
+              </a>
             )}
           </motion.div>
         )}

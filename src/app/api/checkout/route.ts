@@ -1,14 +1,19 @@
 import { NextResponse } from 'next/server';
+import { createOrder } from '@/lib/supabase';
+import { calculateShipping } from '@/lib/shipping';
 
 const API_BASE = 'https://pagrecovery.com/checkout/api/v1';
 const SECRET_KEY = (process.env.PAGRECOVERY_SECRET_KEY || '').trim();
 
 interface CheckoutItem {
+  id: string;
   name: string;
+  category: string;
   size: string;
   variant?: string;
   quantity: number;
-  price: number; // in BRL (e.g. 95.00)
+  price: number;
+  promoLabel?: string;
 }
 
 interface CheckoutAddress {
@@ -44,16 +49,23 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate total in REAIS
-    const totalReais = Math.round(
+    // Calculate subtotal
+    const subtotal = Math.round(
       items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100
     ) / 100;
+
+    // Calculate shipping
+    const shipping = address
+      ? calculateShipping(address.cep, subtotal)
+      : { cost: 0, estimatedDays: 0, label: '', free: true };
+
+    const total = Math.round((subtotal + shipping.cost) * 100) / 100;
 
     const description = items
       .map(i => `${i.quantity}x ${i.name} (${i.size}${i.variant ? ` - ${i.variant}` : ''})`)
       .join(', ');
 
-    // 1. Create checkout session
+    // 1. Create PagRecovery checkout session
     const sessionRes = await fetch(`${API_BASE}/sessions`, {
       method: 'POST',
       headers: {
@@ -61,7 +73,7 @@ export async function POST(request: Request) {
         'X-API-Key': SECRET_KEY,
       },
       body: JSON.stringify({
-        amount: totalReais,
+        amount: total,
         description: `GreekFit — ${description}`,
         customerName: customer.name,
         customerEmail: customer.email,
@@ -72,6 +84,7 @@ export async function POST(request: Request) {
         expiresInMinutes: 30,
         countdownMinutes: 15,
         scarcityMessage: 'Estoque limitado — garanta suas peças!',
+        webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://greekfw.com'}/api/webhook/pagrecovery`,
         ...(address && {
           shippingAddress: {
             zipCode: address.cep.replace(/\D/g, ''),
@@ -86,6 +99,7 @@ export async function POST(request: Request) {
         }),
         metadata: {
           items: items.map(i => ({
+            id: i.id,
             name: i.name,
             size: i.size,
             variant: i.variant,
@@ -108,9 +122,8 @@ export async function POST(request: Request) {
 
     const session = await sessionRes.json();
     const sid = session.shortId || session.sessionId;
-    console.error('[checkout] session created:', JSON.stringify({ sessionId: session.sessionId, shortId: session.shortId, keys: Object.keys(session) }));
 
-    // 2. Fetch session details
+    // 2. Fetch PIX code from session
     let pixCode = '';
     let pixQrCode = '';
 
@@ -122,23 +135,18 @@ export async function POST(request: Request) {
       if (detailsRes.ok) {
         const raw = await detailsRes.json();
         const s = raw.session || raw;
-        console.error('[checkout] session details keys:', Object.keys(s).join(', '), '| status:', s.status, '| hasPixCode:', !!s.pixCode, '| hasProviders:', !!(s.providers?.length));
 
         pixCode = s.pixCode || '';
         pixQrCode = s.pixQrCode || '';
 
-        // 3. If no PIX yet, try /pay with any available provider
         if (!pixCode) {
           const providers = s.providers || [];
-          console.error('[checkout] providers found:', providers.length, providers.map((p: { id: string; methodType: string }) => `${p.id}:${p.methodType}`).join(', '));
-
           const pixProvider = providers.find(
             (p: { methodType?: string; type?: string; enabled?: boolean }) =>
               (p.methodType === 'pix' || p.type === 'pix') && p.enabled !== false
           );
 
           if (pixProvider?.id) {
-            console.error('[checkout] calling /pay with provider:', pixProvider.id);
             const payRes = await fetch(`${API_BASE}/sessions/${sid}/pay`, {
               method: 'POST',
               headers: {
@@ -152,39 +160,66 @@ export async function POST(request: Request) {
               }),
             });
 
-            const payText = await payRes.text();
-            console.error('[checkout] /pay response:', payRes.status, payText.substring(0, 500));
-
             if (payRes.ok) {
               try {
-                const payData = JSON.parse(payText);
+                const payData = await payRes.json();
                 pixCode = payData.pixCode || '';
                 pixQrCode = payData.pixQrCode || '';
               } catch { /* ignore */ }
             }
-          } else {
-            console.error('[checkout] no PIX provider found in session details');
           }
         }
-      } else {
-        console.error('[checkout] session details error:', detailsRes.status, await detailsRes.text().catch(() => 'N/A'));
       }
     } catch (e) {
       console.error('[checkout] PIX fetch error:', e);
     }
 
-    console.error('[checkout] final result: hasPixCode:', !!pixCode, 'hasQrCode:', !!pixQrCode);
+    // 3. Persist order to Supabase
+    let orderId = '';
+    try {
+      const order = await createOrder({
+        session_id: session.sessionId || sid,
+        status: 'pending',
+        customer_name: customer.name.trim(),
+        customer_email: customer.email.trim(),
+        customer_phone: customer.phone.replace(/\D/g, ''),
+        customer_document: (customer.document || '').replace(/\D/g, ''),
+        shipping_address: address || { cep: '', street: '', number: '', neighborhood: '', city: '', state: '' },
+        shipping_cost: shipping.cost,
+        subtotal,
+        total,
+        items: items.map(i => ({
+          product_id: i.id,
+          product_name: i.name,
+          category: i.category || '',
+          size: i.size,
+          variant: i.variant,
+          quantity: i.quantity,
+          unit_price: i.price,
+          promo_label: i.promoLabel,
+        })),
+        payment_method: 'pix',
+        pix_code: pixCode,
+      });
+      orderId = order.id;
+    } catch (e) {
+      console.error('[checkout] order save error:', e);
+      // Don't block checkout — payment session already exists
+    }
 
     const checkoutUrl = session.checkoutUrl
       ? `${session.checkoutUrl}${session.checkoutUrl.includes('?') ? '&' : '?'}method=pix`
       : '';
 
     return NextResponse.json({
-      sessionId: session.sessionId,
+      sessionId: session.sessionId || sid,
+      orderId,
       checkoutUrl,
       pixCode,
       pixQrCode,
-      amount: totalReais,
+      amount: total,
+      shippingCost: shipping.cost,
+      shippingDays: shipping.estimatedDays,
     });
   } catch (error) {
     console.error('[checkout] error:', error);
